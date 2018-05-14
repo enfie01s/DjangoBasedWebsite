@@ -1,0 +1,91 @@
+{% extends 'shows/default.html' %}
+{% load static %}
+{% block content %}
+
+<h1 class="text-center">Upcoming Shows {% if dltoday %}<i class="fa fa-info-circle" aria-hidden="true" title="{{ dltoday|safe }}" data-toggle="tooltip" ></i>{% endif %}</h1>{% if err %}<br><div class="alert alert-danger" role="alert"><b>Error!</b> {{ err }}</div>{% endif %}
+
+
+<div class="weekdays row">
+    {% if errors %}
+    <ul class="col" id="errorcolumn">
+        <li><h4><span>Error</span></h4>
+            <ul>
+            {% for episode in errors %}
+                <li id="epi{{ episode.id }}">
+                    <div>
+                        {% if episode.link %}
+                        <a data-dllink="{{ episode.link }}" id="{{ episode.id }}" class="dl-overlay dl-link"><i class="fa fa-download" aria-hidden="true"></i></a>
+                        {% endif %}
+                        <img src="{% static episode.thumb %}" alt="">
+                    </div>                      
+                    <a href="{% url 'shows:series' episode.series.seotitle %}">{% if user.get_username == 'm3nf' %}{{ episode.series.audience_icon_letter|safe }}{% else %}{{ episode.series.audience_icon|safe }}{% endif %}{{ episode.title_pretty }}</a><br>
+                    <small>{{ episode.episode_detail }}</small>
+                </li>
+            {% endfor %}
+            </ul>
+        </li>
+    </ul>
+    {% endif %}
+
+    {% for day in weekdays %}
+        <ul class="col">
+            <li><h4><span>{{ day|date:"l" }}</span></h4>
+                <ul>
+                {% for episode in thisweek %}{# {{ episode.series.imdb }} #}
+                    {% if episode.due_plus == day %}
+                    <li id="epi{{ episode.id }}">
+                        <div>
+                            {% if episode.link %}
+                            <a data-dllink="{{ episode.link }}" id="{{ episode.id }}" class="dl-overlay dl-link"><i class="fa fa-download" aria-hidden="true"></i></a>
+                            {% endif %}
+                            <img src="{% static episode.thumb %}" alt="">
+                        </div>                        
+                        <a href="{% url 'shows:series' episode.series.seotitle %}">{% if user.get_username == 'm3nf' %}{{ episode.series.audience_icon_letter|safe }}{% else %}{{ episode.series.audience_icon|safe }}{% endif %}{{ episode.title_pretty }}</a><br>
+                        <small>{{ episode.episode_detail }}</small>
+                    </li>
+                    {% endif %}
+                {% endfor %}
+                </ul>
+            </li>
+        </ul>
+    {% endfor %}
+</div>
+
+<iframe id="dl_capture"></iframe>
+{% endblock %}
+{% block script %}
+<script>
+$(document).ready(function(){
+    $('[data-toggle="tooltip"]').tooltip({
+        placement : 'bottom',
+        html: true
+    });
+});
+$("a.dl-link").click(function () {
+    var dllink = this.dataset.dllink;
+    var clickedObj = this.id
+
+    $.ajax({
+        url: '{% url "shows:dl" %}',
+        data: {
+            'epi': this.id,
+            'csrfmiddlewaretoken': '{{ csrf_token }}',
+        },
+        type: 'POST',
+        dateType: 'json',
+        success: function (data) {
+            $('#dl_capture').attr('src',dllink)
+            $('#epi'+clickedObj).remove()
+            if($('#errorcolumn li ul li').length == 0)
+            {
+                $('#errorcolumn').remove()
+            }
+            //$('#dl_capture').load(dllink)
+            if (data) {
+                console.log(data);
+            }
+        }
+    });
+});
+</script>
+{% endblock %}

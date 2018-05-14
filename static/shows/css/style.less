@@ -1,0 +1,104 @@
+.weekdays{
+    /*
+    display: flex;
+    flex-flow: row nowrap;
+    */
+    > ul{
+        /*
+        align-items: stretch;
+        display: inline-block;
+        flex: 1 0 auto;
+        */
+        > li {
+            min-width:150px;
+            text-align: center;
+            > h4 {
+                background: #f4f4f4;                
+                border-bottom:1px solid #e4e4e4; 
+                padding: 3px;
+                position: sticky;
+                top: 54px;
+                z-index: 3;
+                /*
+                &:before, &:after {
+                    -moz-transform: skew(-3deg,-2deg);
+                    -ms-transform: skew(-3deg,-2deg);
+                    -o-transform: skew(-3deg,-2deg);
+                    -webkit-transform: skew(-3deg,-2deg);
+                    bottom: 14px;
+                    box-shadow: 0 15px 5px rgba(0, 0, 0, 0.3);
+                    content: "";
+                    height: 20px;
+                    left: 1px;
+                    max-width: 50%;
+                    position: absolute;
+                    width: 50%;
+                    z-index: -1;
+                }
+                &:after {
+                    -moz-transform: skew(3deg,2deg);
+                    -ms-transform: skew(3deg,2deg);
+                    -o-transform: skew(3deg,2deg);
+                    -webkit-transform: skew(3deg,2deg); 
+                    left: auto;
+                    right: 1px;
+                }
+                */
+            }
+            > ul {
+                > li {
+                    display: block;
+                    padding: 2px;
+                    text-align: left;
+                    > div {
+                        display: block;
+                        left: 0;
+                        position: relative;
+                        top: 0;
+                        > a.dl-overlay {
+                            align-items: center;
+                            background: rgba(0,0,0,.6);
+                            color: #FFF;
+                            cursor: pointer;
+                            display: flex;
+                            font-size: 2em;
+                            height: 100%;
+                            justify-content: center;
+                            left: 0;
+                            position: absolute;
+                            text-align: center;
+                            top: 0;
+                            vertical-align: middle;
+                            width: 100%;
+                            z-index:2;
+                        }
+                        > img {width: 100%;}
+                    }
+                    
+                }
+            }
+        }
+    }
+}
+.weekdays ul,.episodes{    
+    &,ul {
+        list-style-type: none;
+        margin: 0;
+        padding: 0;
+    }
+}
+#dl_capture {
+    height: 0px;
+    visibility: hidden;
+    width: 0px;
+}
+.dl-link, .dlm-link, #readmore { cursor: pointer; }
+.tooltip-inner {
+    text-align: left !important;
+}
+.faded{
+    opacity:.5;
+}
+a > img.icon, a > .fa {height:1em;font-size:1em;}
+.mbanner { width:100%; }
+.container {width: 100%;} 

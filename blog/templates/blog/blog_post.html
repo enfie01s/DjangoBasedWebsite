@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block headscript %}
+<meta property="fb:app_id" content="1367180106713752" />
+<meta property="og:url"                content='http://aristia.net/blog/{{ post.pub_date|date:"Y/m/d"}}/{{ post.seotitle }}/' />
+<meta property="og:type"               content="article" />
+<meta property="og:title"              content="{{post.title}}" />
+<meta property="og:description"        content="{{post.body|safe|truncatewords_html:8}}" />
+{% if post.image %}
+<meta property="og:image"              content="http://aristia.net{{post.image.url}}" />
+{% else %}
+<meta property="og:image"              content="http://aristia.net{% static 'sitepages/img/header.jpg' %}" />
+{% endif %}
+{% endblock %}
+{% block afterbody %}
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) return;
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/en_GB/sdk.js#xfbml=1&version=v2.10";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+{% endblock %}
+{% block content %}
+<div class="page-header">
+<h1>{{post.title}}</h1>
+</div>
+<def><i class="fa fa-clock-o" aria-hidden="true"></i> {{post.pub_date_pretty}}</def> {% if user.is_authenticated %}
+<a href="{% url 'blog:manage' post.id %}" title="Edit"><i class="fa fa-pencil-square-o" aria-hidden="true"></i> Edit</a>
+{% endif %}
+{% if post.image %}<p><img src='{{post.image.url}}' alt='' style='max-height:400px' class='img-fluid center-block'></p>{% endif %}
+<p>{{post.body|safe}}</p>
+<div class="fb-comments" data-href='http://aristia.net/blog/{{ post.pub_date|date:"Y/m/d"}}/{{ post.seotitle }}/' data-numposts="5" data-width="100%"></div>
+{% comment %}
+	<div id="disqus_thread"></div>
+	<script>
+
+	var disqus_config = function () {
+	this.page.identifier = 'post-{{ post.id }}'; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+	};
+
+	(function() { // DON'T EDIT BELOW THIS LINE
+	var d = document, s = d.createElement('script');
+	s.src = 'https://aristiasblog.disqus.com/embed.js';
+	s.setAttribute('data-timestamp', +new Date());
+	(d.head || d.body).appendChild(s);
+	})();
+	</script>
+	<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+{% endcomment %}
+	
+{% endblock %}
+
+
+

@@ -1,0 +1,66 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block styles %}
+<link rel="stylesheet" href="{% static 'sitepages/css/style.css' %}">
+{% endblock %}
+
+{% block header %}
+<header style="background-image: url({% static 'sitepages/img/header.jpg' %});" class="homeheader">
+    <div class="container">
+        <h1 class="text-center">Welcome</h1>
+        <div class="text-center">Me, my family and fluffy unicorns.</div>
+    </div>
+</header>
+{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-sm-4">
+        <a href="http://steamcommunity.com/id/aristia/" target="_blank"><img class="rounded-circle" src="{% static 'sitepages/img/gaming.jpg' %}" alt=""></a>
+        <h2 class="text-center">Gaming</h2>
+        <p class="text-center">I am a bit of a gamer, mostly I like action/adventure RPG and some of my favourites are Far Cry, Tomb Raider, Dishonoured, Minecraft and Hitman.</p>
+    </div>
+    <div class="col-sm-4">
+        <img class="rounded-circle" src="{% static 'sitepages/img/webdev.jpg' %}" alt="Image showing code">
+        <h2 class="text-center">Web Development</h2>
+        <p class="text-center">I am a full stack web developer. Starting off with a small family website in just html, I learned new languages over time and built a career of it.</p>
+    </div>
+    <div class="col-sm-4">
+        <a href="https://www.flickr.com/photos/125747680@N02/" target="_blank"><img class="rounded-circle" src="{% static 'sitepages/img/crafts.jpg' %}" alt=""></a>
+        <h2 class="text-center">Arts & Crafts</h2>
+        <p class="text-center">Among other things I enjoy Baking, Macrame bracelets, Graphic Design and Nail art; using 10 tiny canvasses for creative fun.</p>
+    </div>
+</div>
+<hr>
+<h2>Memorable Dates</h2>
+<div class="card-deck">
+{% for t,d in dates.items %}
+    {% if t != 'Zakynthos holiday' or user.is_authenticated %}
+    <div class="card">
+    <img class="card-img-top" src="{% static 'sitepages/img/' %}{{ t }}.jpg" alt="Card image cap">
+      <div class="card-block">
+        <h4 class="card-title">{{ t }}</h4>
+        <p class="card-text"><small class="text-muted">{% if t == 'Christmas' or t == 'Zakynthos holiday' %}{{ d|timeuntil }} to {% else %}{{ d|timesince }} a{% endif %}go.</small></p>
+        </div>
+    </div>
+    {% endif %}
+{% endfor %}
+</div>
+<hr>
+<div id="books" class="row">
+    <div class="col-sm-2">
+        <span class='box_header'>Current</span><br />
+        <div id='gr_grid_widget_1503412040'></div>
+    </div>
+    <div class="col-sm-10">
+        <span class='box_header'>Recently Read</span><br />
+        <div id='gr_grid_widget_1503411897'></div>
+    </div>
+</div>
+{% endblock %}
+
+{% block script %}
+<script src="https://www.goodreads.com/review/grid_widget/5068176.Stella's%20bookshelf:%20read?cover_size=small&hide_link=true&hide_title=true&num_books=45&order=d&shelf=read&sort=date_read&widget_id=1503411897" type="text/javascript" charset="utf-8"></script>
+<script src="https://www.goodreads.com/review/grid_widget/5068176.Stella's%20currently-reading%20book%20montage?cover_size=medium&hide_link=true&hide_title=true&num_books=1&order=d&shelf=currently-reading&sort=date_added&widget_id=1503412040" type="text/javascript" charset="utf-8"></script>
+{% endblock %}

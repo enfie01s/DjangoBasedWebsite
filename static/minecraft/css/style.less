@@ -1,0 +1,40 @@
+@server-status: 3;
+.server-status{
+    font-size: 1.1em;
+    img { height: 1em; margin-right: .5em; vertical-align: top;}
+    line-height:1.1em;
+}
+
+.crafttbl {
+    background: transparent;
+    border-collapse: separate;
+    width: 100%;
+    td { 
+        &.craftcell { border: 2px inset #777; background: #666; }
+        height: 40px;
+        text-align:center;
+        width: 40px;
+    }
+}
+.itemimg,.itemids {
+    background-image: url(../img/items.png);
+}
+.itempotion {
+    background-image: url(../img/potions.png);
+}
+.itemimg,.itemids {
+    background-repeat: no-repeat;
+    display:inline-block;
+    height: 32px;
+    width: 32px;
+}
+.brewL, .brewR {
+    left: 0;
+    position: relative;
+    top: -22px; 
+}
+.img_fluid {
+    width:100% \9;
+}
+.img-thumbnail { margin-bottom: 5px; }
+.sl-overlay { background: #000 !important; }/* simple lightbox */

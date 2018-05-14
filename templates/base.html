@@ -1,0 +1,100 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- Bootstrap -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous" media="screen">
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400" media="screen"> 
+    <link rel="stylesheet" href="{% static 'sitepages/lib/font-awesome/css/font-awesome.min.css' %}" type="text/css" media="screen">
+    <link rel="stylesheet" href="{% static 'sitepages/css/base.css' %}" media="screen">
+    {% block styles %}{% endblock %}
+    {% block headscript %}{% endblock %}
+    <title>Aristia</title>
+  </head>
+  <body>
+    {% block afterbody %}{% endblock %}
+    <nav class="navbar sticky-top navbar-toggleable-md navbar-inverse bg-inverse">
+      <div class="container">
+        <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#mynav" aria-controls="mynav" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <a class="navbar-brand" href="{% url 'home' %}">Aristia</a>
+        
+        <div class="collapse navbar-collapse" id="mynav">
+             <ul class="navbar-nav mr-auto mt-2 mt-md-0">
+              <li class="nav-item"><a class="nav-link" href="{% url 'blog:home' %}">Blog</a></li>
+              <li class="nav-item"><a class="nav-link" href="{% url 'minecraft:home' %}">Minecraft</a></li>
+              {% comment %}
+              <li class="nav-item dropdown"><a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Portfolio <span class="caret"></span></a>
+                <div class="dropdown-menu">
+                  <a class="dropdown-item" href="{% url 'portfolio:home' %}">Web Development</a>
+                  <a class="dropdown-item" href="{% url 'portfolio:home' %}">Graphics</a>
+                </div>
+              </li>
+              {% endcomment %}
+              {% if user.is_authenticated %}              
+              <li class="nav-item dropdown"><a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Shows <span class="caret"></span></a>
+                <div class="dropdown-menu">
+                  <a class="dropdown-item" href="{% url 'shows:home' %}"><i class="fa fa-television" aria-hidden="true"></i> This Week</a>
+                  <a class="dropdown-item" href="{% url 'shows:onbreak' %}"><i class="fa fa-television" aria-hidden="true"></i> On a break</a>
+                  <a class="dropdown-item" href="{% url 'shows:manage' %}"><i class="fa fa-television" aria-hidden="true"></i> Add Show</a>
+                  <a class="dropdown-item" href="{% url 'shows:movies' %}"><i class="fa fa-film" aria-hidden="true"></i> Movies</a>
+                  <a class="dropdown-item" href="{% url 'shows:managemovie' %}"><i class="fa fa-film" aria-hidden="true"></i> Add Movie</a>
+                </div>
+              </li>
+              {% endif %}
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+            {% if user.is_authenticated %}
+                <li class="nav-item"><a class="nav-link" href="#" onclick="document.getElementById('loform').submit()"><i class="fa fa-sign-out" aria-hidden="true"></i> Log Out</a></li>
+                <form id="loform" method="post" action="{% url 'accounts:logout' %}">{% csrf_token %}<input type="hidden" name="" value=""></form>
+            {% else %}
+                {% comment %}
+                <li class="nav-item"><a class="nav-link" href="{% url 'accounts:signup' %}">Sign Up</a></li>
+                {% endcomment %}
+                <li class="nav-item dropdown"><a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Login <span class="caret"></span></a>
+                <div class="dropdown-menu">
+                  <form action="{% url 'accounts:login' %}" method="post">
+                    {% csrf_token %}                   
+                    <input type="text" name="username" class="form-control" placeholder="Username" aria-describedby="basic-addon1">
+                    
+                    <input type="password" name="password" class="form-control" placeholder="Password" aria-describedby="basic-addon2">
+                    
+                    <button class="btn btn-outline-info my-2 my-sm-0" type="submit"><i class="fa fa-sign-in" aria-hidden="true"></i> Log In</button>
+                  </form> 
+                </div>
+              </li>                             
+            {% endif %}
+            </ul>
+        </div>
+      </div>
+    </nav>
+    {% block header %}
+    {% endblock %}
+    <br>
+    <div class="container">
+    {% block content %}
+    {% endblock %}
+    </div>
+    <br>
+    <footer class="footer sticky-bottom">
+    <div class="container"><span class="text-muted">&copy; Aristia {% now "Y" %}</span></div>
+    </footer>
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js" integrity="sha384-DztdAPBWPRXSA/3eYEEUWrWCy7G5KFbe8fFjk5JAIxUYHKkDx6Qin1DkWx51bBrb" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js" integrity="sha384-vBWWzlZJ8ea9aCX4pEW3rVHjgjt7zpkNpZk+02D9phzyeVkE+jo0ieGizqPLForn" crossorigin="anonymous"></script>
+    {% block script %}
+    {% endblock %}
+  </body>
+</html>

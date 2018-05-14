@@ -1,0 +1,92 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block styles %}
+<link rel="stylesheet" href="{% static 'shows/css/style.css' %}">
+{% endblock %}
+{% block content %}
+{{ BASE_DIR }}
+{% if upcoming.movie %}
+<br><h2>Upcoming Movies</h2><br>
+<ul class="episodes row">
+{% for movie in upcoming.movie %}
+<li class="col-sm-2 {{ movie.fade }}">{% if movie.banner %}<img src="{{ BASE_DIR }}{{ movie.banner.url }}" alt="" class="mbanner"> {% endif %}<br><i class="fa fa-info-circle" aria-hidden="true" title="{{ movie.overview }}" data-toggle="tooltip" ></i> {{ movie.title }}<br><small>{{ movie.date }}</small> <div>{% if movie.certimg %}<img src="{% static movie.certimg %}" alt="" /> {% endif %}{% if movie.turl %}<a href="{{ movie.turl }}" target="_blank" title="IMDB"><i class="fa fa-imdb" aria-hidden="true"></i></a> {% endif %}{% if movie.got != 1 %}<a id="{{ movie.id }}" title="Mark Downloaded" class="dlm-link"><i class="fa fa-check" aria-hidden="true"></i></a> {% endif %}<a href="{% url 'shows:managemovie' movie.seotitle %}" title="Edit"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a></div></li>
+{% endfor %}
+</ul>
+{% endif %}
+
+{% if released.movie %}
+<br><h2>Released Movies</h2><br>
+<ul class="episodes row">
+{% for movie in released.movie %}
+<li class="col-sm-2 {{ movie.fade }}">{% if movie.banner %}<img src="{{ BASE_DIR }}{{ movie.banner.url }}" alt="" class="mbanner"> {% endif %}<br><i class="fa fa-info-circle" aria-hidden="true" title="{{ movie.overview }}" data-toggle="tooltip" ></i> {{ movie.title }}<br><small>{{ movie.date }}</small> <div>{% if movie.certimg %}<img src="{% static movie.certimg %}" alt="" /> {% endif %}{% if movie.turl %}<a href="{{ movie.turl }}" target="_blank" title="IMDB"><i class="fa fa-imdb" aria-hidden="true"></i></a> {% endif %}{% if movie.got != 1 %}<a id="{{ movie.id }}" title="Mark Downloaded" class="dlm-link"><i class="fa fa-check" aria-hidden="true"></i></a> {% endif %}<a href="{% url 'shows:managemovie' movie.seotitle %}" title="Edit"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a></div></li>
+{% endfor %}
+</ul>
+{% endif %}
+
+{% if upcoming.book %}
+<br><h2>Upcoming Books</h2><br>
+<ul class="episodes row">
+{% for movie in upcoming.book %}
+<li class="col-sm-2 {{ movie.fade }}">{% if movie.banner %}<img src="{{ BASE_DIR }}{{ movie.banner.url }}" alt="" class="mbanner"> {% endif %}<br><i class="fa fa-info-circle" aria-hidden="true" title="{{ movie.overview }}" data-toggle="tooltip" ></i> {{ movie.title }}<br><small>{{ movie.date }}</small> <div>{% if movie.turl %}<a href="{{ movie.turl }}" target="_blank" title="IMDB"><i class="fa fa-link" aria-hidden="true"></i></a> {% endif %}{% if movie.got != 1 %}<a id="{{ movie.id }}" title="Mark Downloaded" class="dlm-link"><i class="fa fa-check" aria-hidden="true"></i></a> {% endif %}<a href="{% url 'shows:managemovie' movie.seotitle %}" title="Edit"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a></div></li>
+{% endfor %}
+</ul>
+{% endif %}
+
+{% if released.book %}
+<br><h2>Released Books</h2><br>
+<ul class="episodes row">
+{% for movie in released.book %}
+<li class="col-sm-2 {{ movie.fade }}">{% if movie.banner %}<img src="{{ BASE_DIR }}{{ movie.banner.url }}" alt="" class="mbanner"> {% endif %}<br><i class="fa fa-info-circle" aria-hidden="true" title="{{ movie.overview }}" data-toggle="tooltip" ></i> {{ movie.title }}<br><small>{{ movie.date }}</small> <div>{% if movie.turl %}<a href="{{ movie.turl }}" target="_blank" title="IMDB"><i class="fa fa-link" aria-hidden="true"></i></a> {% endif %}{% if movie.got != 1 %}<a id="{{ movie.id }}" title="Mark Downloaded" class="dlm-link"><i class="fa fa-check" aria-hidden="true"></i></a> {% endif %}<a href="{% url 'shows:managemovie' movie.seotitle %}" title="Edit"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a></div></li>
+{% endfor %}
+</ul>
+{% endif %}
+
+{% if upcoming.tv %}
+<br><h2>Upcoming TV</h2><br>
+<ul class="episodes row">
+{% for movie in upcoming.tv %}
+<li class="col-sm-2 {{ movie.fade }}">{% if movie.banner %}<img src="{{ BASE_DIR }}{{ movie.banner.url }}" alt="" class="mbanner"> {% endif %}<br><i class="fa fa-info-circle" aria-hidden="true" title="{{ movie.overview }}" data-toggle="tooltip" ></i> {{ movie.title }}<br><small>{{ movie.date }}</small> <div>{% if movie.turl %}<a href="{{ movie.turl }}" target="_blank" title="IMDB"><i class="fa fa-imdb" aria-hidden="true"></i></a> {% endif %}<a id="{{ movie.id }}" title="Mark Downloaded" class="dlm-link"><i class="fa fa-check" aria-hidden="true"></i></a> <a href="{% url 'shows:managemovie' movie.seotitle %}" title="Edit"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a></div></li>
+{% endfor %}
+</ul>
+{% endif %}
+
+{% if released.tv %}
+<br><h2>Released TV</h2><br>
+<ul class="episodes row">
+{% for movie in released.tv %}
+<li class="col-sm-2 {{ movie.fade }}">{% if movie.banner %}<img src="{{ BASE_DIR }}{{ movie.banner.url }}" alt="" class="mbanner"> {% endif %}<br><i class="fa fa-info-circle" aria-hidden="true" title="{{ movie.overview }}" data-toggle="tooltip" ></i> {{ movie.title }}<br><small>{{ movie.date }}</small> <div>{% if movie.turl %}<a href="{{ movie.turl }}" target="_blank" title="IMDB"><i class="fa fa-imdb" aria-hidden="true"></i></a> {% endif %}<a id="{{ movie.id }}" title="Mark Downloaded" class="dlm-link"><i class="fa fa-check" aria-hidden="true"></i></a> <a href="{% url 'shows:managemovie' movie.seotitle %}" title="Edit"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a></div></li>
+{% endfor %}
+</ul>
+{% endif %}
+
+{% endblock %}
+{% block script %}
+<script>
+$(document).ready(function(){
+    $('[data-toggle="tooltip"]').tooltip({
+        placement : 'top'
+    });
+});
+$("a.dlm-link").click(function () {
+    var dllink = this.dataset.dllink;
+    var clickedObj = this.id
+
+    $.ajax({
+        url: '{% url "shows:dlm" %}',
+        data: {
+            'id': this.id,
+            'csrfmiddlewaretoken': '{{ csrf_token }}',
+        },
+        type: 'POST',
+        dateType: 'json',
+        success: function (data) {
+            
+            //$('#dl_capture').load(dllink)
+            if (data) {
+                console.log(data);
+            }
+        }
+    });
+});
+</script>
+{% endblock %}

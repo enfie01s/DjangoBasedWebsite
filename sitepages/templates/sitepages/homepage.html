@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block styles %}
+<link rel="stylesheet" href="{% static 'sitepages/css/style.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-sm-4 no-padding">
+        <div class="homeframe clip">
+        <iframe src="https://www.google.com/maps/embed/v1/directions?key=AIzaSyCyezOs6UQ9JYldt4eGT_SZOys8-5BwM5s&amp;origin=Parkway,+Whiteley,+Fareham+PO15+7AH&amp;destination=78+Pitreavie+Rd,+Portsmouth+PO6" name="frame_bbc--travel_clip" id="frame_bbc--travel_clip" style="top:-123px;left:0px" scrolling="auto"></iframe>
+        </div>
+    </div>
+    <div class="col-sm-5">
+        <div class="homeframe clip">
+        <iframe src="http://www.bbc.co.uk/weather/po15" name="frame_bbc--weather_clip" id="frame_bbc--weather_clip" style="top:-93px;left:0px" scrolling="auto"></iframe>
+        </div>
+    </div>
+    <div class="col-sm-3 no-padding">
+        <div class="homeframe web">
+        <iframe src="http://old.aristia.net/clock.php?size=full" name="frame_clock_clip" id="frame_clock_clip" style="top:10px;left:0px" scrolling="auto"></iframe>
+        </div>
+    </div>
+    <div class="col-sm-12 homeframe full">
+        <iframe src="http://www.flightdataservices.co.uk" name="frame_fds_web" id="frame_fds_web"></iframe>
+    </div>
+</div>
+
+{% endblock %}

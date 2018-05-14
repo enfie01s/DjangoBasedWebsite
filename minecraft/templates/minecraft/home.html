@@ -1,0 +1,11 @@
+{% extends 'minecraft/default.html' %}
+{% load static %}
+
+{% block content %}
+<p>Thank you for visiting, here you will find a host of information about our server. The Plugins & Commands page will show you information about a number of plugins which are installed as well as what commands are available to you in-game. There are some player details on the Players page and various information about rules, colours and in-game settings on the Information page.</p>
+<div class="row">
+    <div class="col text-center"><a href="{% url 'minecraft:players' %}">Players</a></div>
+    <div class="col text-center"><a href="{% url 'minecraft:commands' %}">Plugins &amp; Commands</a></div>
+    <div class="col text-center"><a href="{% url 'minecraft:info' %}">Information</a></div>
+</div>
+{% endblock %}

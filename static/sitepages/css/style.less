@@ -1,0 +1,104 @@
+.img_fluid {
+    width:100% \9;
+}
+
+.img-thumbnail { margin-bottom: 5px; }
+
+.sl-overlay { background: #000 !important; }/* simple lightbox */
+
+.homeheader .container { 
+    background: rgba(255,255,255,.8); 
+    border-radius: 10px; 
+    padding:50px;
+    > * {
+        text-shadow: 0 0 10px rgba(255,255,255,1); 
+        color: #000;
+    }
+}
+@media only screen and (max-width : 480px) {
+   nav .container { width: 100%; }
+}
+.rounded-circle { width:50%; margin: auto; display: block; }
+.card-img-top {width:100%;height:auto;}
+.homeframe {
+    background: #FFF;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    box-shadow: 0px 2px 6px rgba(0,0,0,.1);
+    margin-bottom: 20px;
+    overflow: hidden;
+    padding:0;
+    width: 100%;
+    &.clip, &.web { height: 229px; }
+    &.web iframe, &.full iframe { height: 102%; }
+    &.clip iframe, &.full { height: 500px; }
+    iframe { width: 100%; position: relative; z-index: 1; border: 0;}
+}
+.no-padding { padding:0; }
+/* GOODREADS WIDGET */
+#gr_grid_widget_1503411897 { /* books read */
+    &, div.gr_grid_container, div.gr_grid_book_container { width:100%;margin:0 auto; } 
+    div.gr_grid_book_container { /* customize book cover container div here */ 
+        float: left; 
+        height: 77px; 
+        overflow: hidden; 
+        padding: 1px 1px;
+        width: 50px; /* 39px */
+    }
+}
+#gr_grid_widget_1503412040 { /* currently reading */
+    div.gr_grid_container { /* customize grid container div here. eg: width: 500px; */ } 
+    div.gr_grid_book_container { /* customize book cover container div here */ 
+        //height: 125px; 
+        float: left; 
+        overflow: hidden; 
+        padding: 0px 0px;
+        &, a > img {
+            width: 100%; 
+        }
+    }
+}
+/* /GOODREADS WIDGET */
+
+.parallax {
+    height: 100vh;
+    overflow-x: hidden;
+    overflow-y: auto;
+    -webkit-perspective: 1px;
+    perspective: 1px;
+    .parallax_layer {
+        bottom: 0;
+        left: 0;
+        position: absolute;
+        right: 0;
+        top: 0;
+        padding: 100vh 0;
+        transform-origin-x: 100%;
+    }
+    .parallax_fore {
+        -webkit-transform: translateZ(90px) scale(.7);
+        transform: translateZ(90px) scale(.7);
+        z-index: 1;
+    }
+    .parallax_base {
+        -webkit-transform: translateZ(0);
+        transform: translateZ(0);
+        z-index: 4;
+    }
+    .parallax_back {
+        -webkit-transform: translateZ(-1px) scale(2);
+        transform: translateZ(-1px) scale(2);
+        z-index: 3;
+    }
+    .parallax_deep {
+        -webkit-transform: translateZ(-2px) scale(3);
+        transform: translateZ(-2px) scale(3);        
+        z-index: 2;
+    }
+    .parallax_group {
+        position: relative;
+        height: 100vh;
+        -webkit-transform-style: preserve-3d;
+        transform-style: preserve-3d;
+    }
+}

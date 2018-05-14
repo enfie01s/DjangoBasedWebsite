@@ -1,0 +1,136 @@
+{% extends 'minecraft/default.html' %}
+{% load static %}
+{% block content %}
+<div>
+<div class="head"><div>Self-Service area protection</div></div><br>
+<p>Placing your first chest will automatically create your protected area of 9 x 9 with the chest in the center (and 10 blocks below ground).<br>
+<dfn>* = <img src="{% static 'minecraft/img/mouse-left.png' %}" alt="" style="height:1em"> left click for left-handed configurations</dfn>
+<ol>
+    <li>Get your self a <div class="itemimg" style="background-position:-576px -256px" title="" data-toggle="tooltip" data-original-title="1 x Gold Shovel"></div> gold shovel (sometimes this needs to be a <div class="itemimg" style="background-position:-576px -320px" title="" data-toggle="tooltip" data-original-title="1 x Gold Shovel"></div> gold axe).</li>
+    <li>Go to the far corner of the area you want and <img src="{% static 'minecraft/img/mouse-right.png' %}" alt="" style="height:1em"> right click* the block there.</li>
+    <li>Go to the opposite corner and <img src="{% static 'minecraft/img/mouse-right.png' %}" alt="" style="height:1em"> right click* the block there.</li>
+    <li><img src="{% static 'minecraft/img/mouse-right.png' %}" alt="" style="height:1em"> Right click* blocks with a stick to view claim information.</li>
+    <li>You earn 50 blocks per hour (8000 maximum)</li>
+    <li>You can buy more blocks for 1 {{ settings.money1 }} each and sell for 1 {{ settings.money1 }} each (see commands page for more info).</li>
+</ol>
+</p>
+<p>
+For more commands to manipulate your area (setting flags or removing areas for example), visit the <a href="{% url 'minecraft:commands' %}">Commands & Plugins</a> page and limit to the "GriefPrevention" plugin. There is also a tutorial area in game in the main spawn (type /warp tutorial in-game)</p>
+</div>
+<div>
+
+<div class="head"><div>Money ({{ settings.money1 }} and {{ settings.money2 }})</div></div><br>
+    <h4>Making money:</h4>
+    <p>
+    You receive a salary of between {{ settings.salary|safe }} {{ settings.money1 }} every {{ settings.interestdelay }} minutes while you are online.
+    Using "[Trade]" signs you can sell your items, please see link above for sign tutorial
+    Doing jobs for other players. You should pre arrange the fee and as a suggestion, they should pay you ½ deposit and ½ on completion. (See below on how to pay someone)
+    Collect/Mine items which you can sell in your Spawn Shop.
+    </p>
+    <h4>Using your money:</h4>
+    <p>
+    You can use your money in the spawn shop to buy tools, ingredients and so on. Right click a "[Buy]" sign to buy the item(s) and the money will be taken from your balance.
+    Get other players to perform tasks for you in exchange for money (or items, but here we are discussing the money aspect). To pay a player, type <b>/money pay &lt;playername&gt; &lt;amount&gt;</b> (replacing <b>&lt;playername&gt;</b> and <b>&lt;amount&gt;</b> with the recipient's name and the amount you want to pay them).
+    Your money can also buy you claim blocks (as listed above). This will give you a 'home' area that is protected from other players as you see fit.
+    </p>
+</div>
+<div>
+<div class="head"><div>Cost per command</div></div><br>
+<p>You can perform a number of commands for a cost:
+    <ul>
+    <li>/time commands cost 5 {{ settings.money1 }} each. Example: /time day. No delay between uses.</li>
+    <li>/weather commands cost 5 {{ settings.money1 }} each. Example: /weather sun. No delay between uses.</li>
+    <li>/kit * See below for information on the available kits.</li>
+    </ul>
+</p>
+</div>
+<div>
+<div class="head"><div>Kits</div></div><br>
+<ol>
+    {% for kit,details in kits.items %}
+        <li style="margin-bottom:8px">
+        <strong>/kit {{ kit }}</strong> ({{ details.cost }}, {{ details.time }} minutes between uses{% if details.rank != 'All' %}, {{ details.rank }} Only{% endif %}) <br />
+        {% for item,info in details.contents.items %}
+            <div class="{{ info.4 }}" style="background-position:{{ info.2 }}px {{ info.3 }}px" title="{{ info.0 }} x {{ info.1|safe }}{% if info.5 %} {{ info.5|safe }}{% endif %}" data-toggle="tooltip"></div>
+        {% endfor %}        
+        </li>
+       {% endfor %}
+    </ol>
+    {% if user.is_authenticated %}
+    <div class="input-group">
+        <label class="input-group-addon" id="esscopy">Config <dfn>(Click to copy)</dfn></label>
+        <textarea class="form-control" style="height:150px;overflow:auto" id="esstext">{{ esskits|safe }}</textarea>
+    </div>
+    {% endif %}
+</div>
+<div>
+<div class="head"><div>Items</div></div><br>
+
+{% for iid,gridstuff in itemids.items %}
+    <div data-name="{{ gridstuff.0 }}" data-gtype="{{ gridstuff.1 }}" data-qty="{{ gridstuff.2 }}" data-recipe="{{ gridstuff.3 }}" data-item="{{ iid }}" class="itemids {{ gridstuff.6 }}" style="background-position:{{ gridstuff.4 }}px {{ gridstuff.5 }}px"></div>
+{% endfor %}
+</div>
+{% endblock %}
+
+{% block script %}
+<script>
+$(document).ready(function(){
+    $('[data-toggle="tooltip"]').tooltip({
+        placement : 'bottom',
+        html: true
+    });
+    
+    $('.itemids').each(function () {
+        name = $(this).data('name');
+        qty = $(this).data('qty');
+        gtype = $(this).data('gtype');
+        item = $(this).data('item');
+        itemimg = '<div class="' + $(this).attr('class') + '" style="background-position:' + $(this).css('backgroundPosition') + '"></div>'
+        if( gtype != null ){
+            tbl = name
+            thetype=gtype.toString();
+            recipe = $(this).data('recipe').split(',');
+            reclen = recipe.length;
+            pos = [];rec=[];
+            for(x=0;x<reclen;x++)
+            {
+                if(recipe[x].length > 0)
+                {
+                    parts=recipe[x].split('/');// id / pos+pos
+                    pos = parts[1].split('+');
+                    rec[x] = '<div class="' + parts[2] + ' itemids" style="background-position:' + pos[0] + 'px ' + pos[1] + 'px"></div>';
+                }
+                else
+                {
+                    rec[x] = ''; 
+                }
+            }
+            if(thetype=='craft'){
+                tbl = '<table class="crafttbl" id="table{{ iid }}"><tr><td colspan="5"><b>Crafting</b><br>' + name + ', makes ' + qty + '</td></tr><tr><td class="craftcell">' + rec[0] + '</td><td class="craftcell">' + rec[1] + '</td><td class="craftcell">' + rec[2] + '</td><td></td><td></td></tr><tr><td class="craftcell">' + rec[3] + '</td><td class="craftcell">' + rec[4] + '</td><td class="craftcell">' + rec[5] + '</td><td><i class="fa fa-arrow-right" aria-hidden="true"></i></td><td class="craftcell">' + itemimg + '</td></tr><tr><td class="craftcell">' + rec[6] + '</td><td class="craftcell">' + rec[7] + '</td><td class="craftcell">' + rec[8] + '</td><td></td><td></td></tr></table>'
+            }
+            if(thetype=='smelt'){                
+                tbl = '<table class="crafttbl"><tr><td colspan="3"><b>Smelting</b><br />' + name + '</td></tr><tr><td class="craftcell">' + rec[0] + '</td><td></td><td></td></tr><tr><td>🔥</td><td><i class="fa fa-arrow-right" aria-hidden="true"></i></td><td class="craftcell">' + itemimg + '</td></tr><tr><td class="craftcell">' + rec[1] + '</td><td></td><td></td></tr></table>'
+            }
+            if(thetype=='brew'){
+                tbl='<table class="crafttbl"><tr><td colspan="3"><b>Brewing</b><br />' + name + '</td></tr><tr><td></td><td class="craftcell">' + rec[0] + '</td><td></td></tr><tr><td></td><td><img src=\'{% static "minecraft/img/brewpaths.png" %}\' alt=""></td><td></td></tr><tr><td class="craftcell brewL">' + rec[1] + '</td><td class="craftcell">' + rec[1] + '</td><td class="craftcell brewR">' + rec[1] + '</td></tr></table>'
+            }
+            $(this).tooltip({
+                html: true,
+                title: tbl
+            });
+        }
+    });
+});
+
+$("#esscopy").click(function () {
+    var copyTextarea = document.querySelector('#esstext');
+    copyTextarea.select();
+    try {
+        document.execCommand('copy');
+    } catch (err) {
+        console.log('Oops, unable to copy');
+    }
+});
+
+</script>
+{% endblock %}

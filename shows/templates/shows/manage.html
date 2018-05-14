@@ -1,0 +1,63 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block styles %}
+<link rel="stylesheet" href="{% static 'shows/css/style.css' %}">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.7.0/css/bootstrap-datepicker.min.css">
+{% endblock %}
+{% block content %}
+<br><h1>{{ data.head|title }}</h1>
+{% if error %}
+{{ error}}
+{% endif %}
+<br>
+{% if data.urlstuff %}
+<form action="{% url 'shows:manage' data.urlstuff %}" method="post">
+{% else %}
+<form action="{% url 'shows:manage' %}" method="post">
+{% endif %}
+{% csrf_token %}
+
+{% for field in form %}
+    {% if field.name == 'audience' %}
+        <h4><i class="fa fa-{{ field.label }} fa-fw" aria-hidden="true"></i> {{ field.help_text }}</h4>
+        <div class="form-inline">
+        {% for choice in field %}
+            <label class="custom-control custom-radio {{ choice.choice_label|lower }}">
+                {{ choice.tag }}            
+                <span class="custom-control-indicator"></span>
+                <span class="custom-control-description">{{ choice.choice_label }}</span>
+            </label>
+        {% endfor %}
+        </div>
+    {% else %}
+        <div class="input-group">
+            <label for="{{ field.auto_id }}" class="input-group-addon" title="{{ field.help_text }}"><i class="fa fa-{{ field.label }} fa-fw" aria-hidden="true"></i></label>
+            {{ field }}
+        </div>
+    {% endif %}
+<br>
+{% endfor %}
+<br><br><button class="btn btn-primary" type="submit" name="savecontinue"><i class="fa fa-floppy-o" aria-hidden="true"></i> {% if data.urlstuff %}Save{% else %}Add{% endif %} and continue editing</button> <button class="btn btn-primary" type="submit" name="save"><i class="fa fa-floppy-o" aria-hidden="true"></i> {% if data.urlstuff %}Save{% else %}Add{% endif %}</button>
+{% if data.urlstuff %}<button class="btn btn-danger" type="submit" name="deleteshow"><i class="fa fa-times" aria-hidden="true"></i> Delete</button>
+{% endif %}
+</form>
+{% endblock %}
+{% block script %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.7.0/js/bootstrap-datepicker.min.js"></script>
+<script>
+$('#id_seotitle').on("keyup",function(){seoInput($(this))});
+
+$('#id_seotitle').on("focus",function(){
+    if($(this).val().length < 1){
+        $(this).val=$('#id_title').val().toLowerCase();
+        $(this).val(function(i, v) {return $('#id_title').val().toLowerCase();});
+        seoInput($(this))
+    }
+});
+function seoInput(Obj)
+{
+    Obj.val(function(i, v) {return v.replace(/\s/ig,'-');});
+    Obj.val(function(i, v) {return v.replace(/[^a-z0-9\-]/i,'');});
+}
+</script>
+{% endblock %}

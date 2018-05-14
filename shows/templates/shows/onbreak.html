@@ -1,0 +1,40 @@
+{% extends 'shows/default.html' %}
+{% load static %}
+
+{% block content %}
+<br><h2>Shows on a break</h2><br>
+<ul class="episodes">
+{% for seotitle,show in onbreak.items %}
+    <li class="row {% cycle 'odd' 'even' %}">
+        <div class="col-sm-10">
+            <i class="fa fa-info-circle" aria-hidden="true" title="{{ show.overview }}" data-toggle="tooltip" ></i> {% if user.get_username == 'm3nf' %}{{ show.audience_icon_letter|safe }}{% else %}{{ show.audience_icon|safe }}{% endif %}<a href="{% url 'shows:series' seotitle %}">{{ show.title }}</a> <small>{{ show.detail }} <b>Due:</b> {{ show.due }}</small>
+        </div>
+        <div class="col-sm-2 text-right">
+            <a href="{{ show.rsslink }}" target="_blank" title="ShowRSS"><i class="fa fa-rss-square" aria-hidden="true"></i></a> <a href="{{ show.tvdblink }}" target="_blank" title="TheTVDB"><i class="fa fa-tv" aria-hidden="true"></i></a> <a href="{{ show.imdblink }}" target="_blank" title="IMDB"><i class="fa fa-imdb" aria-hidden="true"></i></a> <a href="{% url 'shows:manage' seotitle %}" title="Edit"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>
+        </div>
+    </li>
+{% endfor %}
+</ul>
+<br><h2>Inactive Shows</h2><br>
+<ul class="episodes">
+{% for show in inactive %}
+    <li class="row {% cycle 'odd' 'even' %}">
+        <div class="col-sm-10">
+            <i class="fa fa-info-circle" aria-hidden="true" title="{{ show.overview }}" data-toggle="tooltip" ></i> {% if user.get_username == 'm3nf' %}{{ show.audience_icon_letter|safe }}{% else %}{{ show.audience_icon|safe }}{% endif %}<a href="{% url 'shows:series' show.seotitle %}">{{ show.title_pretty }}</a> <small><b>Estimate:</b> {{ show.firstaired|date:'F' }}, <b>Last Aired:</b> {{ show.lastepi }} ({{ show.lastdue|date:'d M Y' }})</small>
+        </div>
+        <div class="col-sm-2 text-right">
+            <a href="{{ show.rsslink }}" target="_blank" title="ShowRSS"><i class="fa fa-rss-square" aria-hidden="true"></i></a> <a href="{{ show.tvdblink }}" target="_blank" title="TheTVDB"><i class="fa fa-tv" aria-hidden="true"></i></a> <a href="{{ show.imdblink }}" target="_blank" title="IMDB"><i class="fa fa-imdb" aria-hidden="true"></i></a> <a href="{% url 'shows:manage' show.seotitle %}" title="Edit"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>
+        </div>
+    </li>
+{% endfor %}
+</ul>
+{% endblock %}
+{% block script %}
+<script>
+$(document).ready(function(){
+    $('[data-toggle="tooltip"]').tooltip({
+        placement : 'right'
+    });
+});
+</script>
+{% endblock %}

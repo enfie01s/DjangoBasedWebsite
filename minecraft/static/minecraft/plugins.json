@@ -1,0 +1,10 @@
+{
+    "base": {
+        "title": "Spigot",
+        "version": "1.12"
+    }
+    "bukkit": {
+        "title": "Bukkit",
+        "version": "1.11"
+    }
+}

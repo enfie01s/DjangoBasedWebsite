@@ -1,0 +1,15 @@
+{% extends 'minecraft/default.html' %}
+{% load static %}
+{% block content %}
+<div class="row gallery">
+{% for name,file in images.items %}
+    <a href="{% get_media_prefix %}{{ mdir }}full/{{ file.0 }}" class="col-sm-3 d-block"><img src="{% get_media_prefix %}{{ mdir }}{{ file.0 }}" class="img-thumbnail img-fluid" alt="{{ file.1 }}" title="{{ file.1 }}"></a>
+{% endfor %}
+</div>
+{% endblock %}
+{% block script %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/simplelightbox/1.11.1/simple-lightbox.min.js"></script>
+<script>
+var lightbox = $('.gallery a').simpleLightbox();
+</script>
+{% endblock %}

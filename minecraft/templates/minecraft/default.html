@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block styles %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/simplelightbox/1.11.1/simplelightbox.min.css">
+<link rel="stylesheet" href="{% static 'minecraft/css/style.css' %}">
+{% endblock %}
+
+{% block header %}
+<header style="background-image: url({% static header %});" class="header">
+    <div class="container">
+        <h1 class="text-center">Minecraft Vegemites</h1>
+        <div class="text-center">A small vanilla server run for family and friends.<br>
+        {% if status == 'offline' %}
+        Server Offline
+        {% else %}
+        <div class="server-status">{% if status.favicon != '' %}<img src="{{ status.favicon }}" alt="">{% endif %}{{ status.online }} of {{ status.max }} Online</div>
+        {% endif %}</div>
+    </div>
+</header>
+{% endblock %}

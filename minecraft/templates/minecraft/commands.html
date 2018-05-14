@@ -1,0 +1,54 @@
+{% extends 'minecraft/default.html' %}
+{% load static %}
+{% block content %}
+<form action="{% url 'minecraft:commands' %}" method="get" class="row">
+{% for field in form %}
+    <div class="input-group col-sm-5">
+    <label for="{{ field.auto_id }}" class="input-group-addon" title="{{ field.help_text }}"><i class="fa fa-{{ field.label }} fa-fw" aria-hidden="true"></i></label>
+    {{ field }}
+    </div>
+{% endfor %}
+<div class="col-sm-2">
+<button class="btn btn-primary" type="submit"><i class="fa fa-search" aria-hidden="true"></i> Search</button>
+</div>
+</form>
+<hr>
+<div class="page-header">
+    <h1>Commands <small>Available to the chosen rank and above</small></h1>
+</div>
+<def>Command Flags: [] = Optional, &lt;&gt; = Required</def>
+<div>
+<div class="row head">
+    <div class="col-md-5">Command</div>
+    <div class="col-md-7">Description</div>
+</div>
+{% for com in comms %}
+<div class="row {% cycle 'odd' 'even' %}">
+    <div class="col-md-5">{{ com.useage|safe }}</div>
+    <div class="col-md-7"><b>{{ com.pl|safe }}:</b> {{ com.descrip|safe }}</div>
+</div>
+{% endfor %}
+</div>
+<br><br>
+<div class="page-header">
+    <h1>Plugins</h1>
+</div>
+<div>
+<div class="row head">
+    <div class="col-md-5">Plugin</div>
+    <div class="col-md-7">Version</div>
+</div>
+{% for p,v in status.plugins.items %}
+<div class="row {% cycle 'odd' 'even' %}">
+    <div class="col-md-5">{{ p }}</div>
+    <div class="col-md-7">{{ v }}</div>
+</div>
+{% endfor %}
+{% for p in status.names %}
+<div class="row {% cycle 'odd' 'even' %}">
+    <div class="col-md-5">{{ p }}</div>
+    <div class="col-md-7">{{ v }}</div>
+</div>
+{% endfor %}
+</div>
+{% endblock %}

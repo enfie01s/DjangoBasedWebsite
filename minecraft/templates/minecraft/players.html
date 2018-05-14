@@ -1,0 +1,36 @@
+{% extends 'minecraft/default.html' %}
+{% load static %}
+
+{% block headscript %}
+    <script src="{% static 'minecraft/js/2dskin.js' %}" type="text/javascript"></script>
+    <script src="{% static 'minecraft/js/three.min.js' %}" type="text/javascript"></script>
+{% endblock %}
+
+{% block content %}
+<canvas class="canvas" id="canvasaristi4" width="64" height="64" style="display:none"></canvas>
+<div class="model" id="modelaristi4"></div>
+<div class="row">
+    {% for pl in players %}
+        <div class="col-sm-2 text-center">
+            <a href="{% url 'minecraft:player' pl.player %}"><img src="https://minotar.net/armour/bust/{{ pl.player }}/100.png" alt=""></a><br><br>
+            <h3><a href="{% url 'minecraft:player' pl.player %}">{{ pl.player }}</a></h3>
+            <hr>
+            <div class="row small">
+                <div class="col-sm-4"><b>Rank:</b></div><div class="col-sm-8 text-left">{{ pl.rank }}</div><br>
+                <div class="col-sm-4"><b>Prefix:</b></div><div class="col-sm-8 text-left">{{ pl.rank.prettyprefix|safe }}</div><br>
+                <div class="col-sm-4"><b>Seen:</b></div><div class="col-sm-8 text-left">{{ pl.uuid.lastlogin_pretty }}</div>
+            </div>
+            {% comment %}
+            avatar
+            cube
+            helm
+            bust
+            armour/bust
+            body
+            armour/body
+            {% endcomment %}
+        </div>
+    {% endfor %}
+</div>
+{% endblock %}
+
