@@ -1,3 +1,11 @@
+# Python builds and binaries
+dist
+build
+*.egg
+*.egg-info
+*.py[cdo]
+*.so
+
 AriSite.sql
 sftp-config.json
 websitedj/settings.py
