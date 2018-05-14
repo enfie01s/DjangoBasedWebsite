@@ -23,11 +23,10 @@ Show Tasks:
 ---
 Styling - try for flex to share space with columns
 permissions
-Page to show all downloaded today (rare occasion too many to view in popup)
-hover show display details in popup (including last downloaded episode and last inserted episode)
+hover show display details in popup (including last seen episode and last inserted episode)
 button to hide all shows not your own/universal
-display weekday header as 'Today' instead of the day name?
-page to display all shows in case they aren't on any page (this happens if they were downloaded today and thus not in this week's list but also not on a break).
+display relative weekday headers instead of the day name?
+page to display all shows in case they aren't on any page (this happens if they were ticked today and thus not in this week's list but also not on a break).
 '''
 cache.clear()
 today = date.today()
