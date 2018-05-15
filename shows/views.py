@@ -29,19 +29,18 @@ display relative weekday headers instead of the day name?
 page to display all shows in case they aren't on any page (this happens if they were ticked today and thus not in this week's list but also not on a break).
 '''
 cache.clear()
-today = date.today()
-dt_today = timezone.make_aware(datetime.combine(today, time.min))
-dt_yesterday = timezone.make_aware(datetime.combine(today - timedelta(days=1), time.min))
 dt_1000 = timezone.make_aware(datetime(1000,1,1,0,0,0))
-dt_week = timezone.make_aware(datetime.combine(today + timedelta(days=6), time.max))
 
 #@permission_required('shows.series.can_edit')
 @login_required
 @never_cache
 def home(request):
+    today = date.today()
+    dt_today = timezone.make_aware(datetime.combine(today, time.min))
+    dt_yesterday = timezone.make_aware(datetime.combine(today - timedelta(days=1), time.min))
+    dt_tomorrow = timezone.make_aware(datetime.combine(today + timedelta(days=1), time.min))
     dt1 = timezone.make_aware(datetime.combine(today + timedelta(days=6), time.max))
     dt2 = timezone.make_aware(datetime.combine(today - timedelta(days=14), time.min))
-    dt_tomorrow = timezone.make_aware(datetime.combine(today + timedelta(days=1), time.min))
     err=''
     # UPDATE EPISODES #
     try:
@@ -51,7 +50,7 @@ def home(request):
 
     # CREATE DICTIONARIES #
     weekdays = [dt_yesterday + timedelta(days=x+1) for x in range((dt1-dt_yesterday).days)]
-    thisweek = Episode.objects.filter(due__range=(dt_yesterday, dt1)).filter(downloaded__lte=dt_1000).exclude(season=0).order_by('-due','title')    
+    thisweek = Episode.objects.filter(due__range=(dt_yesterday, dt1)).filter(downloaded__lte=dt_1000).exclude(season=0).order_by('-due','title')
     errors = Episode.objects.filter(due__lt=dt_yesterday).filter(due__gt=dt2).filter(downloaded__lte=dt_1000).exclude(season=0).order_by('-due','title')
     dltoday = Episode.objects.filter(downloaded__range=(dt_today,dt_tomorrow))
     dltodaytext = ''
@@ -82,8 +81,10 @@ def home(request):
 
 @login_required
 def series(request,seotitle):
+    today = date.today()
+    dt_today = timezone.make_aware(datetime.combine(today, time.min))
     show = Series.objects.get(seotitle=seotitle)
-    
+
     seasonDict = {}
     for epi in show.sid.all():
         if epi.season > 0:
@@ -110,11 +111,11 @@ def series(request,seotitle):
 def manage(request,seotitle):
     if seotitle:
         show = get_object_or_404(Series,seotitle=seotitle)
-    else:       
+    else:
         show = Series()
 
     if request.method == 'POST':
-        form = SeriesForm(request.POST,instance=show,label_suffix='') 
+        form = SeriesForm(request.POST,instance=show,label_suffix='')
         if seotitle is not None and 'deleteshow' in request.POST:
             try:
                 module_dir = os.path.dirname(__file__)  # get current directory
@@ -154,9 +155,12 @@ def manage(request,seotitle):
 @never_cache
 def onbreak(request):
     #series where no episodes this week
+    today = date.today()
+    dt_today = timezone.make_aware(datetime.combine(today, time.min))
+    dt_yesterday = timezone.make_aware(datetime.combine(today - timedelta(days=1), time.min))
     dt1 = timezone.make_aware(datetime.combine(today + timedelta(days=6), time.max))
-    thisweek = Episode.objects.filter(due__range=(dt_yesterday, dt1)).exclude(series_id=None).exclude(season=0).order_by('-due','title').select_related('series').values_list('series_id',flat=True)  
-    #onbreakq = Episode.objects.exclude(due__range=(dt_yesterday, dt1)).filter(due__gt=dt1).filter(downloaded__lte=dt_1000).order_by('due','title').annotate(dcount=Count('series_id')).select_related('series') 
+    thisweek = Episode.objects.filter(due__range=(dt_yesterday, dt1)).exclude(series_id=None).exclude(season=0).order_by('-due','title').select_related('series').values_list('series_id',flat=True)
+    #onbreakq = Episode.objects.exclude(due__range=(dt_yesterday, dt1)).filter(due__gt=dt1).filter(downloaded__lte=dt_1000).order_by('due','title').annotate(dcount=Count('series_id')).select_related('series')
     #print(thisweek)
     #UPDATE shows_episodes as t1 SET series_id=(SELECT id from shows_series WHERE tvdbid=t1.serid)
     # series with no episodes this week
@@ -176,38 +180,25 @@ def onbreak(request):
             'due':ob.due_pretty,
             'detail':ob.episode_detail
             }
-    '''
-    inactive = Series.objects.exclude(pk__in=thisweek).exclude(pk__in=onbreakflat).extra(select={'firstaired': 'MONTH(firstaired)'},order_by=['firstaired'])
 
-    inactive = Series.objects.filter(sid__due__isnull=True).extra(select={'firstaired': 'MONTH(firstaired)'},order_by=['firstaired'])
-
-    inactive = Series.objects.filter(sid__isnull=True).extra(select={'firstaired': 'MONTH(firstaired)'},order_by=['firstaired'])
-    
-    inactive = Series.objects.exclude(Q(sid__due__gte=dt_today)|Q(sid__due=None)).extra(select={'firstaired': 'MONTH(firstaired)'},order_by=['firstaired'])
-
-    get all with no episodes or with no new episodes
-    exclude series with upcoming episides
-    exclude null
-    don't count old episodes as being an active show
-    '''
     upcomingepi = Episode.objects.filter(due__gte=dt_today).exclude(series_id=None).values_list('series_id',flat=True)
     print(upcomingepi)
-    
+
     inactive = Series.objects.exclude(pk__in=upcomingepi).extra(select={'firstair': 'MONTH(firstaired)'},order_by=['firstair'])
     return render(request,'shows/onbreak.html',{'onbreak':onbreak,'inactive':inactive})
 
 
-def managemovie(request,seotitle=''):    
+def managemovie(request,seotitle=''):
     if seotitle:
-        media = get_object_or_404(Media, seotitle=seotitle)        
-    elif seotitle is None:            
+        media = get_object_or_404(Media, seotitle=seotitle)
+    elif seotitle is None:
         media = Media()
 
     if request.method == 'POST':
         form = MediaForm(request.POST, request.FILES,instance=media,label_suffix='')
 
         # DELETE THE ENTRY
-        if seotitle is not None and 'deletemovie' in request.POST and media.banner is not None:           
+        if seotitle is not None and 'deletemovie' in request.POST and media.banner is not None:
             try:
                 os.remove(settings.BASE_DIR + os.path.normpath(media.banner.url))
             except:
@@ -229,6 +220,8 @@ def managemovie(request,seotitle=''):
     return render(request,'shows/managemovie.html',{'data':media,'form':form})
 
 def movies(request):
+    today = date.today()
+    dt_today = timezone.make_aware(datetime.combine(today, time.min))
     movies = Media.objects.order_by('got','datestr')
     released = {}
     upcoming = {}
@@ -239,7 +232,7 @@ def movies(request):
         'date':movie.datestr_pretty,
         'typ':movie.typ,
         'overview':movie.overview,
-        'turl':movie.turl,        
+        'turl':movie.turl,
         'got':movie.got,
         'banner':movie.banner,
         'id':movie.id
@@ -252,7 +245,7 @@ def movies(request):
             data['certimg']=movie.certimg
         if movie.datestr > dt_today:
             if movie.typ.lower() not in upcoming:
-                upcoming[movie.typ.lower()] = []            
+                upcoming[movie.typ.lower()] = []
             upcoming[movie.typ.lower()].append(data)
         else:
             if movie.typ.lower() not in released:
@@ -269,7 +262,8 @@ def rsslink(epis):
     sea=str(epi.season).zfill(2)
     ep=str(epi.episode).zfill(2)
     thislink = epi.link
-    thisdate =  dt_today
+    today = date.today()
+    thisdate = timezone.make_aware(datetime.combine(today, time.min))
     xml = feedparser.parse("http://showrss.info/show/{0}.rss".format(epi.series.rssfeedid))
     if xml:
         for item in xml.entries:
@@ -294,6 +288,8 @@ def rsslink(epis):
                     epi.save()
 
 def tvdb(showid=''):
+    today = date.today()
+    dt_today = timezone.make_aware(datetime.combine(today, time.min))
     dt0 = timezone.make_aware(datetime.combine(today - timedelta(days=2), time.min))
     dt1 = timezone.make_aware(datetime.combine(today - timedelta(days=30), time.min))
     dt3 = timezone.make_aware(datetime.combine(today - timedelta(days=500), time.min))
@@ -387,7 +383,7 @@ def tvdb(showid=''):
                 filemessage = 'Getting Banner File: ' + file_path
                 urllib.request.urlretrieve("http://www.thetvdb.com/banners/{0}".format(tvdbshow.banner), file_path)
             except:
-                filemessage = None            
+                filemessage = None
             if filemessage is not None:
                 print(filemessage)
 
@@ -426,23 +422,23 @@ def dlm(request):
             '''
 '''
     {
-    'title': 'Shadowhunters 2x14 The Fair Folk', 
+    'title': 'Shadowhunters 2x14 The Fair Folk',
 
-    'title_detail': {'type': 'text/plain', 'language': None, 'base': 'http://showrss.info/show/438.rss', 'value': 'Shadowhunters 2x14 The Fair Folk'}, 
+    'title_detail': {'type': 'text/plain', 'language': None, 'base': 'http://showrss.info/show/438.rss', 'value': 'Shadowhunters 2x14 The Fair Folk'},
 
-    'link': 'magnet:?xt=urn:btih:AFB6BE15925904C4FDE36702E9638D4CA0EF460B&dn=Shadowhunters+S02E14+WEBRip+x264+RARBG&tr=udp%3A%2F%2Ftracker.coppersurfer.tk%3A6969%2Fannounce&tr=udp%3A%2F%2Ftracker.leechers-paradise.org%3A6969%2Fannounce&tr=udp%3A%2F%2Ftracker.opentrackr.org%3A1337%2Fannounce&tr=http%3A%2F%2Ftracker.trackerfix.com%3A80%2Fannounce', 
+    'link': 'magnet:?xt=urn:btih:AFB6BE15925904C4FDE36702E9638D4CA0EF460B&dn=Shadowhunters+S02E14+WEBRip+x264+RARBG&tr=udp%3A%2F%2Ftracker.coppersurfer.tk%3A6969%2Fannounce&tr=udp%3A%2F%2Ftracker.leechers-paradise.org%3A6969%2Fannounce&tr=udp%3A%2F%2Ftracker.opentrackr.org%3A1337%2Fannounce&tr=http%3A%2F%2Ftracker.trackerfix.com%3A80%2Fannounce',
 
-    'published': 'Tue, 27 Jun 2017 18:10:05 +0000', 
+    'published': 'Tue, 27 Jun 2017 18:10:05 +0000',
 
-    'published_parsed': time.struct_time(tm_year=2017, tm_mon=6, tm_mday=27, tm_hour=18, tm_min=10, tm_sec=5, tm_wday=1, tm_yday=178, tm_isdst=0), 
+    'published_parsed': time.struct_time(tm_year=2017, tm_mon=6, tm_mday=27, tm_hour=18, tm_min=10, tm_sec=5, tm_wday=1, tm_yday=178, tm_isdst=0),
 
-    'tv_show_id': '438', 
+    'tv_show_id': '438',
 
-    'tv_show_name': 'Shadowhunters', 
+    'tv_show_name': 'Shadowhunters',
 
-    'tv_episode_id': '38932', 
+    'tv_episode_id': '38932',
 
-    'tv_raw_title': 'Shadowhunters S02E14 WEBRip x264 RARBG', 
+    'tv_raw_title': 'Shadowhunters S02E14 WEBRip x264 RARBG',
     }
 
 
