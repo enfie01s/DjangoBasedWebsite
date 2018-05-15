@@ -1,3 +1,11 @@
+# Python builds and binaries
+dist
+build
+*.egg
+*.egg-info
+*.py[cdo]
+*.so
+
 AriSite.sql
 sftp-config.json
 websitedj/settings.py
@@ -7,3 +15,4 @@ shows/static/shows/img/fart/
 static/shows/img/bart/
 static/shows/img/fart/
 shows/static/shows/img/bart/
+*.sublime*

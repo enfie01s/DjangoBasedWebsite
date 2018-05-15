@@ -19,7 +19,7 @@ import urllib.request
 import os
 
 '''
-Show Tasks:
+TODO:
 ---
 Styling - try for flex to share space with columns
 permissions
@@ -27,7 +27,9 @@ hover show display details in popup (including last seen episode and last insert
 button to hide all shows not your own/universal
 display relative weekday headers instead of the day name?
 page to display all shows in case they aren't on any page (this happens if they were ticked today and thus not in this week's list but also not on a break).
+Page for all shows and order by status (active/on break/inactive).
 '''
+
 cache.clear()
 dt_1000 = timezone.make_aware(datetime(1000,1,1,0,0,0))
 
@@ -59,12 +61,7 @@ def home(request):
         dltodaytext = '<b>Downloaded Today</b><br>'
     for dlt in dltoday:
         dltodaytext += str(dlt.title_pretty()) + '&nbsp;' + str(dlt.episode_detail()) + '<br>'
-    '''
-    if errors:
-        daypc = 12.5
-    else:
-        daypc = 14.2
-    '''
+
     # GET LINKS FROM SHOWSRSS #
     for epi in errors:
         rsslink(epi)
@@ -160,12 +157,9 @@ def onbreak(request):
     dt_yesterday = timezone.make_aware(datetime.combine(today - timedelta(days=1), time.min))
     dt1 = timezone.make_aware(datetime.combine(today + timedelta(days=6), time.max))
     thisweek = Episode.objects.filter(due__range=(dt_yesterday, dt1)).exclude(series_id=None).exclude(season=0).order_by('-due','title').select_related('series').values_list('series_id',flat=True)
-    #onbreakq = Episode.objects.exclude(due__range=(dt_yesterday, dt1)).filter(due__gt=dt1).filter(downloaded__lte=dt_1000).order_by('due','title').annotate(dcount=Count('series_id')).select_related('series')
-    #print(thisweek)
-    #UPDATE shows_episodes as t1 SET series_id=(SELECT id from shows_series WHERE tvdbid=t1.serid)
+
     # series with no episodes this week
     onbreakq = Episode.objects.exclude(series_id__in=thisweek).exclude(due__lt=dt_today).exclude(season=0).order_by('due','title').select_related('series')
-    #onbreakflat = onbreakq.values_list('series_id',flat=True)
     onbreak = {}
     for ob in onbreakq:
         if ob.series.seotitle not in onbreak:
