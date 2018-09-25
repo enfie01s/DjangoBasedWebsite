@@ -1,0 +1,5 @@
+mysqlclient
+Pillow
+feedparser
+pytvdbapi
+mcstatus

@@ -26,8 +26,7 @@ permissions
 hover show display details in popup (including last seen episode and last inserted episode)
 button to hide all shows not your own/universal
 display relative weekday headers instead of the day name?
-page to display all shows in case they aren't on any page (this happens if they were ticked today and thus not in this week's list but also not on a break).
-Page for all shows and order by status (active/on break/inactive).
+page for all shows in case they aren't on any page (this happens if they were ticked today and thus not in this week's list but also not on a break) and order by status (active/on break/inactive).
 '''
 
 cache.clear()
