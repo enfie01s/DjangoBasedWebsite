@@ -5,6 +5,7 @@ build
 *.egg-info
 *.py[cdo]
 *.so
+*.pyc
 
 AriSite.sql
 sftp-config.json
