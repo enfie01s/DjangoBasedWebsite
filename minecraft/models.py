@@ -121,17 +121,24 @@ class SitePerm(models.Model):
     PLUGINCHOICES = (
         ('bukkit','Bukkit'),
         ('GriefPrevention','Grief Prevention'),
+        ('GriefPreventionFlags','Grief Prevention Flags'),
         ('Essentials','Essentials'),
+        ('LuckPerms','Luck Perms'),
+        ('SimplePets','Simple Pets'),
+        ('LuckPerms','Luck Perms'),
+        ('ImageOnMap','Image On Map'),
         ('WorldEdit','World Edit'),
-        ('WorldGuard','World Guard'),
-        ('Multiverse-Core','Multiverse Core'),
-        ('iConomy','iConomy'),
-        ('LogBlock','Log Block'),
-        ('DeathControl','Death Control'),
-        ('ChestShop','Chest Shop'),
-        ('QuickShop','Quick Shop'),
-        ('RegionForSale','Region For Sale'),
-        ('NoLagg','No Lagg')
+        ('FurnitureLib','Furniture'),
+        ('ChestsPlusPlus','Chests++'),
+    #    ('WorldGuard','World Guard'),
+    #    ('Multiverse-Core','Multiverse Core'),
+    #    ('iConomy','iConomy'),
+    #    ('LogBlock','Log Block'),
+    #    ('DeathControl','Death Control'),
+    #    ('ChestShop','Chest Shop'),
+    #    ('QuickShop','Quick Shop'),
+    #    ('RegionForSale','Region For Sale'),
+    #    ('NoLagg','No Lagg')
     )
     pl = models.CharField(max_length=255,choices=PLUGINCHOICES)
     perm = models.CharField(max_length=255)
@@ -153,7 +160,9 @@ class SitePerm(models.Model):
         join altcom to com if not blank 
         theComm = self.altcomm if len(self.altcomm) > 0 else self.comm
         '''
-        usebits = self.altcomm.replace('/&lt;command&gt;','')
+        usebits = ''
+        if self.altcomm:
+            usebits = self.altcomm.replace('/&lt;command&gt;','')
         return self.comm + usebits
 
     class Meta:

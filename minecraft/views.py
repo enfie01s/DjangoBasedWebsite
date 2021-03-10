@@ -8,18 +8,25 @@ from .forms import SitePermForm
 import os,random
 
 plugins = [
-    'WorldEdit 6.1.7.2',
-    'PermissionsEx 1.23.4',
-    'WorldGuard 6.2.1',
-    'Essentials 21',
-    'EssentialsProtect 21',
-    'EssentialsAntiBuild 21',
-    'EssentialsChat 21',
-    'EssentialsSpawn 21',
-    'GriefPrevention 16.7.1',
-    'DeathControl 2.1.1',
-    'Vault 1.5.6',
-    'ClearLagg 2.9.3'
+    'WorldEdit 7.2.0+a51fa43',
+    'Essentials 2.18.2',
+    'EssentialsProtect 2.18.2',
+    'EssentialsAntiBuild 2.18.2',
+    'EssentialsChat 2.18.2',
+    'EssentialsSpawn 2.18.2',
+    'GriefPrevention 16.13.0',
+    'Vault 1.7.3-b131',
+    'bukkit 1.16.4',
+    'GriefPrevention 16.15.0-39f385e',
+    'GriefPreventionFlags 5.8.5',
+    'LuckPerms 5.0.130',
+    'SimplePets 4.4',
+    'LuckPerms 4.0.126',
+    'ImageOnMap 4.0',
+    'WorldEdit 7.2.0+a51fa43',
+    'FurnitureLib 2.3.9',
+    'ChestsPlusPlus 1_16_R3',
+    'DiscordSRV 1.21.3',
 ]
 msettings = {
     "costperblock":0.002,
