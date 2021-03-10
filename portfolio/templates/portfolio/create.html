@@ -1,0 +1,116 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block styles %}
+<link rel="stylesheet" href="{% static 'portfolio/lib/bootstrap-datepicker-1.6.4-dist/css/bootstrap-datepicker.min.css' %}">
+{% endblock %}
+{% block content %}
+<h1>{% if form.instance.id %}Edit{% else %}Create{% endif %} Post</h1>
+{% if form.errors %}
+<div class="alert alert-danger" role="alert"><i class="fa fa-exclamation-triangle" aria-hidden="true"></i> Error:<br>{{ form.errors }}</div>
+{% endif %}
+{% if form.instance.id %}
+<form action="{% url 'portfolio:manage' form.instance.id %}" method="post" enctype="multipart/form-data">
+{% else %}
+<form action="{% url 'portfolio:manage' %}" method="post" enctype="multipart/form-data">
+{% endif %}
+{% csrf_token %}
+{% for field in form %}
+    {% if field.name == 'typ' %}
+        <h4><i class="fa fa-{{ field.label }} fa-fw" aria-hidden="true"></i> {{ field.help_text }}</h4>
+        <div class="form-inline">
+        {% for choice in field %}
+            <label class="custom-control custom-radio {{ choice.choice_label|lower }}">
+                {{ choice.tag }}            
+                <span class="custom-control-indicator"></span>
+                <span class="custom-control-description">{{ choice.choice_label|safe }}</span>
+            </label>
+        {% endfor %}
+        </div>
+    {% else %}
+        <div class="input-group">
+            <label for="{{ field.auto_id }}" class="input-group-addon" title="{{ field.help_text }}"><i class="fa fa-{{ field.label }} fa-fw" aria-hidden="true"></i></label>
+            {% if field.name == 'image' and form.image %}<span class="form-control" style="display:inline">{% endif %}
+            {{ field }}
+            {% if field.name == 'image' %}</span>{% endif %}
+        </div>
+    {% endif %}
+<br>
+{% endfor %}
+
+<br><br>
+<button class="btn btn-primary" type="submit" name="savecontinue"><i class="fa fa-floppy-o" aria-hidden="true"></i> {% if form.instance.id %}Save{% else %}Add{% endif %} and continue editing</button> <button class="btn btn-primary" type="submit" name="save"><i class="fa fa-floppy-o" aria-hidden="true"></i> {% if form.instance.id %}Save{% else %}Add{% endif %}</button>
+{% if form.instance.id %}<button class="btn btn-danger" type="submit" name="deleterow"><i class="fa fa-times" aria-hidden="true"></i> Delete</button>
+{% endif %}
+</form>
+{% endblock %}
+{% block script %}
+<script src="{% static 'portfolio/lib/bootstrap-datepicker-1.6.4-dist/js/bootstrap-datepicker.js' %}"></script>
+<script src="https://cdn.ckeditor.com/4.7.1/full/ckeditor.js"></script>
+<script>
+$(document).ready(function(){
+    $('#id_pub_date').datepicker({ 
+    format: 'dd/mm/yyyy',
+    orientation: 'bottom',
+    todayHighlight: true
+    });
+});
+// https://ckeditor.com/latest/samples/toolbarconfigurator/index.html#basic
+CKEDITOR.replace( 'id_body', {
+    customConfig: '',
+    toolbarGroups: [
+        { name: 'document', groups: [ 'mode', 'document', 'doctools' ] },
+        { name: 'clipboard', groups: [ 'clipboard', 'undo' ] },
+        { name: 'editing', groups: [ 'find', 'selection', 'spellchecker', 'editing' ] },
+        { name: 'forms', groups: [ 'forms' ] },
+        { name: 'paragraph', groups: [ 'list', 'indent', 'blocks', 'align', 'bidi', 'paragraph' ] },
+        { name: 'links', groups: [ 'links' ] },
+        '/',
+        { name: 'styles', groups: [ 'styles' ] },
+        { name: 'basicstyles', groups: [ 'basicstyles', 'cleanup' ] },
+        { name: 'insert', groups: [ 'insert' ] },
+        { name: 'colors', groups: [ 'colors' ] },
+        { name: 'tools', groups: [ 'tools' ] },
+        { name: 'others', groups: [ 'others' ] },
+
+        { name: 'about', groups: [ 'about' ] }
+    ],
+    removeButtons: 'Save,NewPage,Preview,Print,Templates,SelectAll,Form,Checkbox,Radio,TextField,Textarea,Select,Button,ImageButton,HiddenField,CopyFormatting,RemoveFormat,Language,BidiRtl,BidiLtr,Flash,PageBreak,Iframe,Font,FontSize,About'
+});
+/*
+CKEDITOR.editorConfig = function( config ) {
+    config.toolbarGroups = [
+        { name: 'document', groups: [ 'mode', 'document', 'doctools' ] },
+        { name: 'clipboard', groups: [ 'clipboard', 'undo' ] },
+        { name: 'editing', groups: [ 'find', 'selection', 'spellchecker', 'editing' ] },
+        { name: 'forms', groups: [ 'forms' ] },
+        { name: 'paragraph', groups: [ 'list', 'indent', 'blocks', 'align', 'bidi', 'paragraph' ] },
+        { name: 'links', groups: [ 'links' ] },
+        '/',
+        { name: 'styles', groups: [ 'styles' ] },
+        { name: 'basicstyles', groups: [ 'basicstyles', 'cleanup' ] },
+        { name: 'insert', groups: [ 'insert' ] },
+        { name: 'colors', groups: [ 'colors' ] },
+        { name: 'tools', groups: [ 'tools' ] },
+        { name: 'others', groups: [ 'others' ] },
+        { name: 'about', groups: [ 'about' ] }
+    ];
+
+    config.removeButtons = 'Save,NewPage,Preview,Print,Templates,SelectAll,Form,Checkbox,Radio,TextField,Textarea,Select,Button,ImageButton,HiddenField,CopyFormatting,RemoveFormat,Language,BidiRtl,BidiLtr,Flash,PageBreak,Iframe,Font,FontSize,About';
+};
+*/
+$('#id_seotitle').on("keyup",function(){seoInput($(this))});
+
+$('#id_seotitle').on("focus",function(){
+    if($(this).val().length < 1){
+        $(this).val=$('#id_title').val().toLowerCase();
+        $(this).val(function(i, v) {return $('#id_title').val().toLowerCase();});
+        seoInput($(this))
+    }
+});
+function seoInput(Obj)
+{
+    Obj.val(function(i, v) {return v.replace(/\s/ig,'-');});
+    Obj.val(function(i, v) {return v.replace(/[^a-z0-9\-]/i,'');});
+}
+</script>
+{% endblock %}

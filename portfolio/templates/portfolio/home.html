@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+{% block content %}
+<h1 class="text-center">Welcome to my portfolio</h1>
+<p class="text-center">Here are a few of the projects I have worked on over the years</p>
+
+<h2>Latest Posts {% if user.is_authenticated %}
+<a class="btn btn-primary" href="{% url 'portfolio:manage' %}"><i class="fa fa-plus" aria-hidden="true"></i> New Post</a><br>
+{% endif %}</h2>
+<hr>
+{% for post in posts.all %}
+<br><br>
+<h3><a href="{% url 'portfolio:portfolio_post' post.pub_date|date:'Y' post.pub_date|date:'m' post.pub_date|date:'d' post.seotitle %}">{{ post.title }}</a></h3>
+<def><i class="fa fa-clock-o" aria-hidden="true"></i> {{post.pub_date_pretty}}</def>
+{% if post.image %}<p><img src='{{post.image.url}}' alt='' style='max-height:200px' class='img-fluid d-block'></p>{% endif %}
+<p>{{ post.body|truncatewords_html:80|safe }}</p>
+{% endfor %}
+{% endblock %}
