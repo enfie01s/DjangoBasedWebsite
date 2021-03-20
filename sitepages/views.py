@@ -9,7 +9,7 @@ memdates = {
 'Started dating': [2001,1,1,0,0,0],
 'Got married': [2004,6,19,0,0,0],
 'Mat quit smoking': [2013,9,27,21,0,0],#'2013-09-27 21:00:00',
-'Zakynthos holiday': [2017,10,9,0,0,0],
+'Mat quit vaping': [2018,7,1,0,0,0],
 'Christmas': [2016,12,25,0,0,0]
 }
 

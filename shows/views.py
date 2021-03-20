@@ -219,6 +219,7 @@ def movies(request):
     released = {}
     upcoming = {}
     for movie in movies:
+        movie.typ = movie.typ or 'movie'
         data = {
         'title':movie.title,
         'seotitle':movie.seotitle,
