@@ -30,3 +30,7 @@ def home(request):
     return render(request,'sitepages/home.html',{'dates':dates})
 def homepage(request):
     return render(request,'sitepages/homepage.html')
+def mat(request):
+    return render(request,'sitepages/mat.html')
+def stella(request):
+    return render(request,'sitepages/stella.html')
