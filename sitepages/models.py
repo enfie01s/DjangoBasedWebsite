@@ -20,5 +20,31 @@ class Contact(models.Model):
     def fullAddress(self):
         return self.street + ', ' + self.city + ', ' + self.county + ', ' + self.postcode + ', ' + self.country
 
+    def qrVcard(self):
+        vcard = """BEGIN:VCARD
+    VERSION:3.0
+    N:{lastName};{firstName}
+    FN:{fullName}
+    ADR:;;{street};{city};{county};{postCode};{country}
+    TEL;WORK;VOICE:
+    TEL;CELL:{phone}
+    TEL;FAX:
+    EMAIL;WORK;INTERNET:{email}
+    URL:
+    END:VCARD"""
+
+    return vcard.format(
+        firstName=self.firstName,
+        lastName=self.lastName,
+        fullName=self.fullName(),
+        street=self.street,
+        city=self.city,
+        county=self.county,
+        postCode=self.postcode,
+        country=self.country,
+        phone=self.phone,
+        email=self.email
+    )
+
     class Meta:
         db_table = 'user_contact'

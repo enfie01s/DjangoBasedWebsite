@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from datetime import date, datetime, time, timedelta
 from django.utils import timezone
-
+import qrcode
 
 today = date.today()
 dt_today = timezone.make_aware(datetime.combine(today, time.min))
@@ -34,4 +34,18 @@ def contact(request, firstName):
     if firstName == 'mat':
         firstName = 'mathew'
     contact = get_object_or_404(Contact,firstName=firstName)
+
+    path = 'static/sitepages/img/'
+    qr = qrcode.QRCode(
+        version=1,
+        error_correction=qrcode.constants.ERROR_CORRECT_L,
+        box_size=10,
+        border=4,
+    )
+    qr.add_data(contact.qrVcard())
+    qr.make(fit=True)
+
+    img = qr.make_image(fill_color="black", back_color="white")
+    img.save(path + contact.firstName + '-qr.jpg')
+
     return render(request,'sitepages/contact.html',{'contact':contact})
