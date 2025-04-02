@@ -17,5 +17,8 @@ class Contact(models.Model):
     def fullName(self):
         return self.firstName + ' ' + self.lastName
 
+    def fullAddress(self):
+        return self.street + ', ' + self.city + ', ' + self.county + ', ' + self.postcode + ', ' + self.country
+
     class Meta:
         db_table = 'user_contact'
