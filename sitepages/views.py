@@ -1,7 +1,8 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from datetime import date, datetime, time, timedelta
 from django.utils import timezone
-
+from .models import Contact
+import qrcode
 
 today = date.today()
 dt_today = timezone.make_aware(datetime.combine(today, time.min))
@@ -30,3 +31,31 @@ def home(request):
     return render(request,'sitepages/home.html',{'dates':dates})
 def homepage(request):
     return render(request,'sitepages/homepage.html')
+def contact(request, firstName):
+    if firstName == 'mat':
+        firstName = 'mathew'
+    contact = get_object_or_404(Contact,firstName=firstName)
+
+    path = 'static/sitepages/img/'
+    qr = qrcode.QRCode(
+        version=1,
+        error_correction=qrcode.constants.ERROR_CORRECT_L,
+        box_size=10,
+        border=4,
+    )
+    #qr.add_data('BEGIN:VCARD')
+    #qr.add_data('VERSION:3.0')
+    #qr.add_data('FN:' + contact.fullName)
+    #qr.add_data('ADR:;;' + contact.street + ';' + contact.city + ';' + contact.county + ';' + contact.postcode + ';' + contact.country)
+    #TEL;WORK;VOICE:1234567890
+    #TEL;CELL:Mobile
+    #EMAIL;WORK;INTERNET:foo@email.com
+    #URL:http://website.com
+    #qr.add_data('END:VCARD')
+    qr.add_data(firstName)
+    qr.make(fit=True)
+
+    img = qr.make_image(fill_color="black", back_color="white")
+    img.save(path + contact.firstName + '-qr.jpg')
+
+    return render(request,'sitepages/contact.html',{'contact':contact})
