@@ -8,17 +8,17 @@
 <div class="contact-title">{{ contact.fullName }}</div>
 
 <div class="contact-field">
-  <div class="contact-field__title">Email</div>
-  <div class="contact-field__data"><a href="mailto:{{ contact.email }}">{{ contact.email }}</a></div>
-</div>
-
-<div class="contact-field">
-  <div class="contact-field__title">Name</div>
+  <div class="contact-field__title">phone</div>
   <div class="contact-field__data"><a href="tel:{{ contact.phone }}">{{ contact.phone }}</a></div>
 </div>
 
 <div class="contact-field">
-  <div class="contact-field__title">Address</div>
+  <div class="contact-field__title">email</div>
+  <div class="contact-field__data"><a href="mailto:{{ contact.email }}">{{ contact.email }}</a></div>
+</div>
+
+<div class="contact-field">
+  <div class="contact-field__title">address</div>
   <div class="contact-field__data">{{ contact.fullAddress|safe }}</div>
 </div>
 
