@@ -22,17 +22,17 @@ class Contact(models.Model):
         return self.street + ', ' + self.city + ', ' + self.county + ', ' + self.postcode + ', ' + self.country
 
     def qrVcard(self):
-        vcard = "BEGIN:VCARD"
-                + "\nVERSION:3.0"
-                + "\nN:{lastName};{firstName}"
-                + "\nFN:{fullName}"
-                + "\nADR:;;{street};{city};{county};{postCode};{country}"
-                + "\nTEL;WORK;VOICE:"
-                + "\nTEL;CELL:{phone}"
-                + "\nTEL;FAX:"
-                + "\nEMAIL;WORK;INTERNET:{email}"
-                + "\nURL:"
-                + "\nEND:VCARD"
+        vcard = "BEGIN:VCARD" \
+        + "\nVERSION:3.0" \
+        + "\nN:{lastName};{firstName}" \
+        + "\nFN:{fullName}" \
+        + "\nADR:;;{street};{city};{county};{postCode};{country}" \
+        + "\nTEL;WORK;VOICE:" \
+        + "\nTEL;CELL:{phone}" \
+        + "\nTEL;FAX:" \
+        + "\nEMAIL;WORK;INTERNET:{email}" \
+        + "\nURL:" \
+        + "\nEND:VCARD"
 
         return vcard.format(
             firstName=self.firstName,
