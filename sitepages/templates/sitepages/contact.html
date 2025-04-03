@@ -7,5 +7,5 @@
 {% block content %}
 {{ contact.fullName }} {{ contact.fullAddress }} {{ contact.email }} {{ contact.phone }}
 <br>
-<img src="{% static 'sitepages/img/' %}{{ contact.firstName}}-qr.jpg" alt="" />
+<img src="{% static 'sitepages/img/' %}{{ contact.firstName }}-qr.jpg" alt="" class="qr-image" />
 {% endblock %}

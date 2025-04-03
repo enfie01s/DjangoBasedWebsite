@@ -43,16 +43,7 @@ def contact(request, firstName):
         box_size=10,
         border=4,
     )
-    #qr.add_data('BEGIN:VCARD')
-    #qr.add_data('VERSION:3.0')
-    #qr.add_data('FN:' + contact.fullName)
-    #qr.add_data('ADR:;;' + contact.street + ';' + contact.city + ';' + contact.county + ';' + contact.postcode + ';' + contact.country)
-    #TEL;WORK;VOICE:1234567890
-    #TEL;CELL:Mobile
-    #EMAIL;WORK;INTERNET:foo@email.com
-    #URL:http://website.com
-    #qr.add_data('END:VCARD')
-    qr.add_data(firstName)
+    qr.add_data(contact.qrVcard())
     qr.make(fit=True)
 
     img = qr.make_image(fill_color="black", back_color="white")
