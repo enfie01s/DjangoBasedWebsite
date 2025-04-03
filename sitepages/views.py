@@ -20,7 +20,7 @@ memdates = {
 'Josh Birthday':[2002,2,8,20,30,0],
 'Chloe Birthday':[2000,7,7,13,0,0]
 '''
-# Create your views here.
+
 def home(request):
     dates = {}
     for title,date in memdates.items():
@@ -29,8 +29,10 @@ def home(request):
         ddate = timezone.make_aware(datetime(date[0],date[1],date[2],date[3],date[4],date[5]))  
         dates[title] = ddate
     return render(request,'sitepages/home.html',{'dates':dates})
+
 def homepage(request):
     return render(request,'sitepages/homepage.html')
+
 def contact(request, firstName):
     if firstName == 'mat':
         firstName = 'mathew'
