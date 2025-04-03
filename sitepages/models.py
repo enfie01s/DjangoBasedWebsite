@@ -19,7 +19,7 @@ class Contact(models.Model):
         return self.firstName + ' ' + self.lastName
 
     def fullAddress(self):
-        return self.street + ', ' + self.city + ', ' + self.county + ', ' + self.postcode + ', ' + self.country
+        return self.street + ',<br> ' + self.city + ',<br> ' + self.county + ',<br> ' + self.postcode + ',<br> ' + self.country
 
     def qrVcard(self):
         vcard = "BEGIN:VCARD" \
