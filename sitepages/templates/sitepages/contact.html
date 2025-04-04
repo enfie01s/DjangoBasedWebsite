@@ -23,5 +23,5 @@
 </div>
 
 <br>
-<img src="{% static 'sitepages/img/' %}{{ contact.firstName }}-qr.jpg" alt="" class="qr-image" />
+{{ qrcode|safe }}
 {% endblock %}

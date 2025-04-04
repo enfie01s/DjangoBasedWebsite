@@ -3,6 +3,9 @@ from datetime import date, datetime, time, timedelta
 from django.utils import timezone
 from .models import Contact
 import qrcode
+import qrcode.image.svg
+from qrcode.image.styles.moduledrawers.svg import SvgPathSquareDrawer
+from decimal import Decimal
 
 today = date.today()
 dt_today = timezone.make_aware(datetime.combine(today, time.min))
@@ -38,17 +41,16 @@ def contact(request, firstName):
         firstName = 'mathew'
     contact = get_object_or_404(Contact,firstName=firstName)
 
-    path = 'media/sitepages/'
     qr = qrcode.QRCode(
         version=1,
         error_correction=qrcode.constants.ERROR_CORRECT_M,
         box_size=10,
         border=4,
+        image_factory=qrcode.image.svg.SvgPathFillImage,
     )
     qr.add_data(contact.qrVcard())
     qr.make(fit=True)
 
-    img = qr.make_image(fill_color="black", back_color="white")
-    img.save(path + contact.firstName + '-qr.jpg')
+    img = qr.make_image(fill_color="black", back_color="white", module_drawer=SvgPathSquareDrawer(size_ratio=Decimal(0.8)), attrib={"class": "qr-image"})
 
-    return render(request,'sitepages/contact.html',{'contact':contact})
+    return render(request,'sitepages/contact.html',{'contact':contact, 'qrcode': img.to_string(encoding='unicode')})

@@ -3,4 +3,4 @@
 .contact-field {background:#ffffff;margin-bottom:20px;padding:12px 20px;border-radius:10px;box-shadow:2px 4px 10px rgba(0, 0, 0, 0.04);}
 .contact-field__title {font-size:16px;color:#444444;}
 .contact-field__data {font-size:20px;color:#000000;}
-.qr-image {width:200px;aspect-ratio:1/1;box-shadow:2px 4px 10px rgba(0, 0, 0, .2);border-radius:6px;overflow:hidden;}
+.qr-image {width:200px;height:200px;box-shadow:2px 4px 10px rgba(0, 0, 0, .2);border-radius:6px;overflow:hidden;}
