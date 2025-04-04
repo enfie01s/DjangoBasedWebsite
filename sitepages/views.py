@@ -38,7 +38,7 @@ def contact(request, firstName):
         firstName = 'mathew'
     contact = get_object_or_404(Contact,firstName=firstName)
 
-    path = 'static/sitepages/img/'
+    path = 'media/sitepages/'
     qr = qrcode.QRCode(
         version=1,
         error_correction=qrcode.constants.ERROR_CORRECT_L,
