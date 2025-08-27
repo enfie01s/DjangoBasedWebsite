@@ -1,5 +1,5 @@
 from django.shortcuts import render, get_object_or_404
-from mcstatus import MinecraftServer
+from mcstatus import JavaServer as MinecraftServer
 from django.conf import settings
 from django.contrib.auth.decorators import permission_required, login_required
 #from django.forms import SitePermForm
