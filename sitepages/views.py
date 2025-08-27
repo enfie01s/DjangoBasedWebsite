@@ -4,7 +4,8 @@ from django.utils import timezone
 from .models import Contact
 import qrcode
 import qrcode.image.svg
-from qrcode.image.styles.moduledrawers.svg import SvgPathSquareDrawer
+from qrcode.image.styles.moduledrawers.svg import SvgPathSquareDrawer 
+
 from decimal import Decimal
 
 today = date.today()
@@ -48,6 +49,7 @@ def contact(request, firstName):
         border=4,
         image_factory=qrcode.image.svg.SvgPathFillImage,
     )
+
     qr.add_data(contact.qrVcard())
     qr.make(fit=True)
 

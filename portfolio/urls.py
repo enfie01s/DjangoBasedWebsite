@@ -1,4 +1,5 @@
-from django.conf.urls import url, static
+from django.conf.urls import static
+from django.urls import re_path as url
 from django.conf.urls.static import static
 from django.conf import settings
 from . import views
