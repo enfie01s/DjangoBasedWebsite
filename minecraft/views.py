@@ -1361,9 +1361,12 @@ def gallery(request,player=''):
 def commands(request):
     form = SitePermForm(request.GET)
     enabled_plugins = dict(s.split(' ',1) for s in plugins).keys()
-
+    
+    status = getmcstatus('status')
+    enabled_plugins_dynamic = status['plugins'].keys()
+     
     #if form.is_valid():#we only look at 2 fields so this will always be invalid as it expects a fully filled form.
-    comms = SitePerm.objects.exclude(comm='Ignore').exclude(comm='None').filter(pl__in=enabled_plugins)
+    comms = SitePerm.objects.exclude(comm='Ignore').exclude(comm='None').filter(pl__in=enabled_plugins_dynamic)
     if 'minrank' in request.GET and request.GET['minrank'] is not None and len(request.GET['minrank']) > 0:
         comms = comms.filter(minrank=request.GET['minrank'])
     elif 'pl' not in request.GET or request.GET['pl'] is None or len(request.GET['pl']) == 0:
@@ -1439,9 +1442,9 @@ def getmcstatus(stat):
             # It may give more information than a ping, such as a full player list or mod information.
             query = server.query()
             statusinfo = {
-                'names':query.players.names,
-                'online':query.players.online,
-                'max':query.players.max,
+                'names':query.players.sample,
+                'online':str(query.players.online),
+                'max':str(query.players.max),
                 'descrip':query.motd,
                 'version':query.software.version,
                 'plugins':dict(s.split(' ',1) for s in query.software.plugins),
@@ -1456,15 +1459,18 @@ def getmcstatus(stat):
             status.version.protocol, status.description.text, status.version.name, status.players.online, status.players.max, status.latency
             ['description', 'favicon', 'latency', 'players', 'raw', 'version']
             '''
+            query = server.query()
             status = server.status()
+            online = status.players.online
+            maxplayers = status.players.max
             statusinfo = {
-                'names':["{}".format(player.name) for player in status.players.names] if status.players.names is not None else [],
-                'online':status.players.online,
-                'max':status.players.max,
-                'descrip':status.description['text'],
+                #'names':["{}".format(player.name) for player in status.players.names] if status.players.names is not None else [],
+                'online':str(online),
+                'max':str(maxplayers),
+                #'descrip':status.description['text'],
                 'version':status.version.name,
-                'plugins':dict(s.split(' ',1) for s in plugins),
-                'favicon':status.favicon
+                'plugins':dict(s.split(' ',1) for s in query.software.plugins),
+                'favicon':status.icon
             }
         except:
             statusinfo = 'Offline'

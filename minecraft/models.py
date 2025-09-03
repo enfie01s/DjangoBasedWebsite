@@ -20,7 +20,6 @@ colours = {
 }
 #coloursrev = dict(map(reversed, colours.items()))
 
-
 # Create your models here.
 
 class GPplayer(models.Model):
@@ -119,17 +118,12 @@ class SitePlayer(models.Model):# specify db_column on a foreign key field or it 
 class SitePerm(models.Model):
     RANKCHOICES = Rank.objects.values_list('id','rank').all()
     PLUGINCHOICES = (
-        ('bukkit','Bukkit'),
         ('GriefPrevention','Grief Prevention'),
-        ('GriefPreventionFlags','Grief Prevention Flags'),
         ('Essentials','Essentials'),
-        ('LuckPerms','Luck Perms'),
         ('SimplePets','Simple Pets'),
         ('LuckPerms','Luck Perms'),
         ('ImageOnMap','Image On Map'),
-        ('WorldEdit','World Edit'),
-        ('FurnitureLib','Furniture'),
-        ('ChestsPlusPlus','Chests++'),
+    #    ('ChestsPlusPlus','Chests++'),
     #    ('WorldGuard','World Guard'),
     #    ('Multiverse-Core','Multiverse Core'),
     #    ('iConomy','iConomy'),
@@ -140,6 +134,7 @@ class SitePerm(models.Model):
     #    ('RegionForSale','Region For Sale'),
     #    ('NoLagg','No Lagg')
     )
+
     pl = models.CharField(max_length=255,choices=PLUGINCHOICES)
     perm = models.CharField(max_length=255)
     bool = models.CharField(max_length=255,choices=(('true','True'),('false','False')))
