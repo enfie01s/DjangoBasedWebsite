@@ -1439,7 +1439,7 @@ def getmcstatus(stat):
             # It may give more information than a ping, such as a full player list or mod information.
             query = server.query()
             statusinfo = {
-                'names':query.players.names,
+                'names':query.players.sample,
                 'online':query.players.online,
                 'max':query.players.max,
                 'descrip':query.motd,
@@ -1456,15 +1456,18 @@ def getmcstatus(stat):
             status.version.protocol, status.description.text, status.version.name, status.players.online, status.players.max, status.latency
             ['description', 'favicon', 'latency', 'players', 'raw', 'version']
             '''
+            query = server.query()
             status = server.status()
+            online = status.players.online
+            maxplayers = status.players.max
             statusinfo = {
-                'names':["{}".format(player.name) for player in status.players.names] if status.players.names is not None else [],
-                'online':status.players.online,
-                'max':status.players.max,
-                'descrip':status.description['text'],
+                #'names':["{}".format(player.name) for player in status.players.names] if status.players.names is not None else [],
+                'online':online if online > 0 else "None",
+                'max':maxplayers if maxplayers > 0 else "None",
+                #'descrip':status.description['text'],
                 'version':status.version.name,
-                'plugins':dict(s.split(' ',1) for s in plugins),
-                'favicon':status.favicon
+                'plugins':dict(s.split(' ',1) for s in query.software.plugins),
+                'favicon':status.icon
             }
         except:
             statusinfo = 'Offline'

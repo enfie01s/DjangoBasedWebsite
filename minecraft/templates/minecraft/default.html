@@ -11,10 +11,10 @@
     <div class="container">
         <h1 class="text-center">Minecraft Vegemites</h1>
         <div class="text-center">A small vanilla server run for family and friends.<br>
-        {% if status == 'offline' %}
+        {% if status == 'Offline' %}
         Server Offline
         {% else %}
-        <div class="server-status">{% if status.favicon != '' %}<img src="{{ status.favicon }}" alt="">{% endif %}{{ status.online }} of {{ status.max }} Online</div>
+        <div class="server-status">{% if status.favicon != '' %}<img src="{{ status.favicon }}" alt="">{% endif %}{{ status.players.online }} of {{ status.max }} Online</div>
         {% endif %}</div>
     </div>
 </header>
