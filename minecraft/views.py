@@ -1330,16 +1330,16 @@ itempos = {
     "99":["-416","-832"]  
 }
 def home(request):
-    return render(request,'minecraft/home.html',{'status':mcstatus('status'),'header':headerimg()})
+    return render(request,'minecraft/home.html',{'status':getmcstatus('status'),'header':headerimg()})
 
 def players(request):
     theplayers = SitePlayer.objects.all().order_by('-rank__order')
-    return render(request,'minecraft/players.html',{'players':theplayers,'status':mcstatus('status'),'header':headerimg()})
+    return render(request,'minecraft/players.html',{'players':theplayers,'status':getmcstatus('status'),'header':headerimg()})
 
 def player(request,playername):
     theplayer = get_object_or_404(SitePlayer,player=playername)
     print(theplayer)
-    return render(request,'minecraft/player.html',{'playern':playername,'status':mcstatus('status'),'header':headerimg()})
+    return render(request,'minecraft/player.html',{'playern':playername,'status':getmcstatus('status'),'header':headerimg()})
 def gallery(request,player=''):
     #gallerypath = 'minecraft/img/gallery/' + gdir
     media_dir = 'minecraft/gallery'  # get current directory
@@ -1372,7 +1372,7 @@ def commands(request):
     if 'pl' in request.GET and request.GET['pl'] is not None and len(request.GET['pl']) > 0:  
         comms = comms.filter(pl=request.GET['pl'])
 
-    return render(request,'minecraft/commands.html',{'comms':comms,'form':form,'header':headerimg(),'status':mcstatus('status')})
+    return render(request,'minecraft/commands.html',{'comms':comms,'form':form,'header':headerimg(),'status':getmcstatus('status')})
 
 def info(request):
     newkits = {}
@@ -1419,10 +1419,10 @@ def info(request):
         if thegrid is not None:
             craftingdata[i] = thegrid
     #print(craftingdata)
-    return render(request,'minecraft/info.html',{'itemids':craftingdata,'settings':msettings,'esskits':kits_to_ess(),'kits':newkits,'status':mcstatus('status'),'header':headerimg()})
+    return render(request,'minecraft/info.html',{'itemids':craftingdata,'settings':msettings,'esskits':kits_to_ess(),'kits':newkits,'status':getmcstatus('status'),'header':headerimg()})
 
 # FUNCTIONS
-def mcstatus(stat):
+def getmcstatus(stat):
     # https://github.com/Dinnerbone/mcstatus    
     statusinfo = []
     server = MinecraftServer.lookup("mc.aristia.net:25565")#play.guildcraft.org / wma.im <- for testing full info
@@ -1458,7 +1458,7 @@ def mcstatus(stat):
             '''
             status = server.status()
             statusinfo = {
-                'names':["{}".format(player.name) for player in status.players.sample] if status.players.sample is not None else [],
+                'names':["{}".format(player.name) for player in status.players.names] if status.players.names is not None else [],
                 'online':status.players.online,
                 'max':status.players.max,
                 'descrip':status.description['text'],
