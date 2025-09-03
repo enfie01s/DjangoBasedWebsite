@@ -8,25 +8,20 @@ from .forms import SitePermForm
 import os,random
 
 plugins = [
-    'WorldEdit 7.2.0+a51fa43',
-    'Essentials 2.18.2',
-    'EssentialsProtect 2.18.2',
-    'EssentialsAntiBuild 2.18.2',
-    'EssentialsChat 2.18.2',
-    'EssentialsSpawn 2.18.2',
+    'Essentials 2.21.2',
+    'EssentialsProtect 2.21.2',
+    'EssentialsAntiBuild 2.21.2',
+    'EssentialsChat 2.21.2',
+    'EssentialsSpawn 2.21.2',
     'GriefPrevention 16.13.0',
     'Vault 1.7.3-b131',
-    'bukkit 1.16.4',
     'GriefPrevention 16.15.0-39f385e',
     'GriefPreventionFlags 5.8.5',
     'LuckPerms 5.0.130',
     'SimplePets 4.4',
-    'LuckPerms 4.0.126',
     'ImageOnMap 4.0',
-    'WorldEdit 7.2.0+a51fa43',
-    'FurnitureLib 2.3.9',
-    'ChestsPlusPlus 1_16_R3',
-    'DiscordSRV 1.21.3',
+    'ChestsPlusPlus 2.16',
+    'DiscordSRV 1.30',
 ]
 msettings = {
     "costperblock":0.002,
@@ -1365,9 +1360,10 @@ def gallery(request,player=''):
 
 def commands(request):
     form = SitePermForm(request.GET)
-        
+    enabled_plugins = dict(s.split(' ',1) for s in plugins).keys()
+
     #if form.is_valid():#we only look at 2 fields so this will always be invalid as it expects a fully filled form.
-    comms = SitePerm.objects.exclude(comm='Ignore').exclude(comm='None')
+    comms = SitePerm.objects.exclude(comm='Ignore').exclude(comm='None').filter(pl__in=enabled_plugins)
     if 'minrank' in request.GET and request.GET['minrank'] is not None and len(request.GET['minrank']) > 0:
         comms = comms.filter(minrank=request.GET['minrank'])
     elif 'pl' not in request.GET or request.GET['pl'] is None or len(request.GET['pl']) == 0:

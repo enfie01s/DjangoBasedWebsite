@@ -8,6 +8,7 @@ class BaseForm(forms.ModelForm):
             field.widget.attrs['class'] = 'form-control'
 
 class SitePermForm(BaseForm):
+    minrank = forms.ModelChoiceField(queryset=Rank.objects.all(), required=False)
     class Meta:
         model = SitePerm
         fields = ['minrank','pl']
