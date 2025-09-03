@@ -1361,9 +1361,12 @@ def gallery(request,player=''):
 def commands(request):
     form = SitePermForm(request.GET)
     enabled_plugins = dict(s.split(' ',1) for s in plugins).keys()
-
+    
+    status = getmcstatus('status')
+    enabled_plugins_dynamic = status['plugins'].keys()
+     
     #if form.is_valid():#we only look at 2 fields so this will always be invalid as it expects a fully filled form.
-    comms = SitePerm.objects.exclude(comm='Ignore').exclude(comm='None').filter(pl__in=enabled_plugins)
+    comms = SitePerm.objects.exclude(comm='Ignore').exclude(comm='None').filter(pl__in=enabled_plugins_dynamic)
     if 'minrank' in request.GET and request.GET['minrank'] is not None and len(request.GET['minrank']) > 0:
         comms = comms.filter(minrank=request.GET['minrank'])
     elif 'pl' not in request.GET or request.GET['pl'] is None or len(request.GET['pl']) == 0:
@@ -1440,8 +1443,8 @@ def getmcstatus(stat):
             query = server.query()
             statusinfo = {
                 'names':query.players.sample,
-                'online':query.players.online,
-                'max':query.players.max,
+                'online':str(query.players.online),
+                'max':str(query.players.max),
                 'descrip':query.motd,
                 'version':query.software.version,
                 'plugins':dict(s.split(' ',1) for s in query.software.plugins),
@@ -1462,8 +1465,8 @@ def getmcstatus(stat):
             maxplayers = status.players.max
             statusinfo = {
                 #'names':["{}".format(player.name) for player in status.players.names] if status.players.names is not None else [],
-                'online':online if online > 0 else "None",
-                'max':maxplayers if maxplayers > 0 else "None",
+                'online':str(online),
+                'max':str(maxplayers),
                 #'descrip':status.description['text'],
                 'version':status.version.name,
                 'plugins':dict(s.split(' ',1) for s in query.software.plugins),

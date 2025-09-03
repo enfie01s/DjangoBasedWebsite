@@ -14,7 +14,7 @@
         {% if status == 'Offline' %}
         Server Offline
         {% else %}
-        <div class="server-status">{% if status.favicon != '' %}<img src="{{ status.favicon }}" alt="">{% endif %}{{ status.players.online }} of {{ status.max }} Online</div>
+        <div class="server-status">{% if status.favicon != '' %}<img src="{{ status.favicon }}" alt="">{% endif %}{{ status.online }} of {{ status.max }} Online</div>
         {% endif %}</div>
     </div>
 </header>
