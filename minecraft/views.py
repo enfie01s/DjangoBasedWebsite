@@ -1339,7 +1339,7 @@ def players(request):
 def player(request,playername):
     theplayer = get_object_or_404(SitePlayer,player=playername)
     print(theplayer)
-    return render(request,'minecraft/player.html',{'playern':playername,'status':getmcstatus('status'),'header':headerimg()})
+    return render(request,'minecraft/player.html',{'player':theplayer,'status':getmcstatus('status'),'header':headerimg()})
 def gallery(request,player=''):
     #gallerypath = 'minecraft/img/gallery/' + gdir
     media_dir = 'minecraft/gallery'  # get current directory

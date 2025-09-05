@@ -4,10 +4,23 @@
 
 {% block content %}
     <canvas id="canvas" width="64" height="64" style="display:none"></canvas>
-    <div class="row">
-        <div class="col-sm-6">123</div>
-        <div id="model" class="col-sm-6"></div>
+    
+    <div class="row align-items-center player-info">
+      <div id="model" class="col-sm-4"></div>
+        <div class="col-sm-8">
+          <h2>{{ player.player }}</h2>
+	  <div class="row">
+	    <div class="col-sm-3"><b>Rank:</b></div><div class="col-sm-9 text-left">{{ player.rank }}</div><br>
+            <div class="col-sm-3"><b>Prefix:</b></div><div class="col-sm-9 text-left">{{ player.rank.prettyprefix|safe }}</div><br>
+            <div class="col-sm-3"><b>Last Online:</b></div><div class="col-sm-9 text-left">{{ player.uuid.lastlogin_pretty }}</div>
+	  </div>
+      </div>
     </div>
+
+    <div class="gallery">
+	<h2>Gallery</h2>
+    </div>
+
 {% endblock%}
 
 {% block headscript %}
@@ -75,7 +88,7 @@
                 Animate();
             }
         }
-        img.src = 'http://crafatar.com/skins/{{ playern }}';
+        img.src = 'http://crafatar.com/skins/{{ player.uuid }}';
         img.onerror = function() {
             console.log("Failed loading " + img.src);
         }
