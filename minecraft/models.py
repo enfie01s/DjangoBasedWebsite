@@ -32,8 +32,19 @@ class GPplayer(models.Model):
     def __str__(self):
         return self.name
 
+    def get_ordinal(self, i):
+        SUFFIXES = {1: 'st', 2: 'nd', 3: 'rd'}
+        # Adapted from https://codereview.stackexchange.com/questions/41298/producing-ordinal-numbers
+        if 10 <= i % 100 <= 20:
+            return 'th'
+        else:
+            return SUFFIXES.get(i % 10, 'th')
+    
     def lastlogin_pretty(self):
-        return self.lastlogin.strftime('%d/%m/%y %H:%I')
+        lastlogin = self.lastlogin
+        day = lastlogin.strftime("%-d")
+        ordinal = self.get_ordinal(int(day))
+        return day + ordinal + " " +self.lastlogin.strftime('%B \'%y %I:%M%p')
 
     class Meta:
         db_table = 'griefprevention_playerdata'
