@@ -1,0 +1,6 @@
+{
+  "dependencies": {
+    "skin3d": "^0.0.12",
+    "skinview3d": "^2.0.0-alpha.10"
+  }
+}
