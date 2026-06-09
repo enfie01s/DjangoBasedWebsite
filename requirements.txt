@@ -1,7 +1,8 @@
-django
-mysqlclient
+Django==5.2.5
 Pillow
 feedparser
 pytvdbapi
 mcstatus
 qrcode[pip]==7.4.2
+gunicorn==23.0.0
+mysqlclient==2.2.7
