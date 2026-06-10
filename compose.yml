@@ -3,6 +3,7 @@ services:
   db:
     image: mysql:latest
     container_name: aristia-mysql
+    command: --pid-file=/var/lib/mysql/mysqld.pid
     environment:
       MYSQL_DATABASE: ${DATABASE_NAME}
       MYSQL_USER: ${DATABASE_USERNAME}
