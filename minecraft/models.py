@@ -1,4 +1,5 @@
 from django.db import models
+#from django.utils.functional import lazy
 
 colours = {
 "0":"#000",#Black
@@ -127,7 +128,6 @@ class SitePlayer(models.Model):# specify db_column on a foreign key field or it 
         #order_with_respect_to = 'rank' # needs _order column in this db
 
 class SitePerm(models.Model):
-    RANKCHOICES = Rank.objects.values_list('id','rank').all()
     PLUGINCHOICES = (
         ('GriefPrevention','Grief Prevention'),
         ('Essentials','Essentials'),
@@ -151,7 +151,7 @@ class SitePerm(models.Model):
     bool = models.CharField(max_length=255,choices=(('true','True'),('false','False')))
     comm = models.CharField(max_length=255)
     descrip = models.CharField(max_length=255)
-    minrank = models.ForeignKey(Rank, db_column='minrank',choices=RANKCHOICES, default='10', related_name='prankid', on_delete=models.DO_NOTHING)
+    minrank = models.ForeignKey(Rank, db_column='minrank', default='10', related_name='prankid', on_delete=models.DO_NOTHING)
     world = models.CharField(max_length=255)
     altcomm = models.CharField(max_length=255)
     flag = models.CharField(max_length=255)

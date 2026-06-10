@@ -42,17 +42,6 @@
                 </div>
               </li>
               {% endcomment %}
-              {% if user.is_authenticated %}              
-              <li class="nav-item dropdown"><a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Shows <span class="caret"></span></a>
-                <div class="dropdown-menu">
-                  <a class="dropdown-item" href="{% url 'shows:home' %}"><i class="fa fa-television" aria-hidden="true"></i> This Week</a>
-                  <a class="dropdown-item" href="{% url 'shows:onbreak' %}"><i class="fa fa-television" aria-hidden="true"></i> On a break</a>
-                  <a class="dropdown-item" href="{% url 'shows:manage' %}"><i class="fa fa-television" aria-hidden="true"></i> Add Show</a>
-                  <a class="dropdown-item" href="{% url 'shows:movies' %}"><i class="fa fa-film" aria-hidden="true"></i> Movies</a>
-                  <a class="dropdown-item" href="{% url 'shows:managemovie' %}"><i class="fa fa-film" aria-hidden="true"></i> Add Movie</a>
-                </div>
-              </li>
-              {% endif %}
             </ul>
             <ul class="nav navbar-nav navbar-right">
             {% if user.is_authenticated %}

@@ -1,4 +1,5 @@
 services:
+
   db:
     image: mysql:latest
     container_name: aristia-mysql
@@ -9,8 +10,8 @@ services:
       MYSQL_ROOT_PASSWORD: ${DATABASE_ROOT_PASSWORD}
     ports:
       - "${DATABASE_PORT}:${DATABASE_PORT}"
-#    volumes:
-#      - mysql_data:/var/lib/mysql/data/aristia
+    volumes:
+      - mysql_data:/var/lib/mysql
     env_file:
       - .env
 
@@ -23,7 +24,6 @@ services:
       - "8000:8000"
     depends_on:
       - db
-#    command: sh -c "django-admin makemigrations && django-admin migrate"
     environment:
       DJANGO_SECRET_KEY: ${DJANGO_SECRET_KEY}
       DEBUG: ${DEBUG}
@@ -38,5 +38,5 @@ services:
     env_file:
       - .env
 
-#volumes:
-#  mysql_data:
+volumes:
+  mysql_data:

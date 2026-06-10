@@ -12,10 +12,6 @@ sftp-config.json
 websitedj/settings.py
 media/
 venv/
-shows/static/shows/img/fart/
-static/shows/img/bart/
-static/shows/img/fart/
-shows/static/shows/img/bart/
 static/sitepages/img/Mathew-qr.jpg
 static/sitepages/img/Stella-qr.jpg
 static/sitepages/img/mat-qr.svg
