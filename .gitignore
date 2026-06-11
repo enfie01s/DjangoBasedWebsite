@@ -9,7 +9,6 @@ build
 
 AriSite.sql
 sftp-config.json
-websitedj/settings.py
 media/
 venv/
 static/sitepages/img/Mathew-qr.jpg
