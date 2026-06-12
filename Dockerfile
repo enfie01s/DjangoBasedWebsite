@@ -49,7 +49,7 @@ COPY --from=builder /usr/local/bin/ /usr/local/bin/
 WORKDIR /app
 
 # Copy application code
-COPY --chown=aristia:aristia . .
+COPY --chown=aristia:www-data . .
 
 # Set environment variables to optimize Python
 ENV PYTHONDONTWRITEBYTECODE=1
