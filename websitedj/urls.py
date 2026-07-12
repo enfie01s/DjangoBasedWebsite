@@ -4,7 +4,7 @@ from django.conf.urls.static import static
 from django.conf import settings
 from django.contrib import admin
 from minecraft import views
-from shows import views
+#from shows import views
 import sitepages.views
 from blog import views
 from portfolio import views
@@ -13,7 +13,7 @@ from accounts import views
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^vegemites/', include('minecraft.urls')),
-    url(r'^shows/', include('shows.urls')),
+#    url(r'^shows/', include('shows.urls')),
     url(r'^blog/', include('blog.urls')),
     url(r'^portfolio/', include('portfolio.urls')),
     url(r'^accounts/', include('accounts.urls')),

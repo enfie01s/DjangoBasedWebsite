@@ -7,9 +7,10 @@ build
 *.so
 *.pyc
 
+.env
+
 AriSite.sql
 sftp-config.json
-websitedj/settings.py
 media/
 venv/
 shows/static/shows/img/fart/
