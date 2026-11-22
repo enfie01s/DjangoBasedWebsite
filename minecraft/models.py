@@ -49,44 +49,6 @@ class GPplayer(models.Model):
     class Meta:
         db_table = 'griefprevention_playerdata'
 
-class Entity(models.Model):
-    name = models.CharField(max_length=50)
-    etype = models.SmallIntegerField(db_column='type')
-    nick = models.CharField(max_length=255)
-
-    def __str__(self):
-        return self.name
-
-    class Meta:
-        db_table = 'pex_entity'
-        ordering = ['etype','name']
-
-class Inheritance(models.Model):
-    child = models.CharField(max_length=50)
-    parent = models.CharField(max_length=50)
-    itype = models.SmallIntegerField(db_column='type')
-    world = models.CharField(max_length=50)
-
-    def __str__(self):
-        return self.child
-
-    class Meta:
-        db_table = 'pex_inheritance'
-
-class Permission(models.Model):
-    name = models.CharField(max_length=50)
-    ptype = models.SmallIntegerField(db_column='type')
-    permission = models.TextField()
-    world = models.CharField(max_length=50)
-    value = models.TextField()
-
-    def __str__(self):
-        return self.permission
-
-    class Meta:
-        db_table = 'pex_permissions'
-        ordering = ['name','world']
-
 class Rank(models.Model):
     rank = models.CharField(max_length=255)
     prefix = models.CharField(max_length=255)

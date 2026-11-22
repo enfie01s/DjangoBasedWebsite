@@ -42,6 +42,8 @@
                 </div>
               </li>
               {% endcomment %}
+              {% comment %}Shows is switched off in websitedj/urls.py; these links break every logged-in page while it is.{% endcomment %}
+              {% comment %}
               {% if user.is_authenticated %}              
               <li class="nav-item dropdown"><a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Shows <span class="caret"></span></a>
                 <div class="dropdown-menu">
@@ -53,6 +55,7 @@
                 </div>
               </li>
               {% endif %}
+              {% endcomment %}
             </ul>
             <ul class="nav navbar-nav navbar-right">
             {% if user.is_authenticated %}

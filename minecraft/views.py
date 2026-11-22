@@ -3,7 +3,7 @@ from mcstatus import JavaServer as MinecraftServer
 from django.conf import settings
 from django.contrib.auth.decorators import permission_required, login_required
 #from django.forms import SitePermForm
-from .models import SitePlayer,Rank,SitePerm,Permission,Inheritance,Entity
+from .models import SitePlayer,Rank,SitePerm
 from .forms import SitePermForm
 import os,random
 
@@ -1487,86 +1487,6 @@ def headerimg():
     headpath = os.path.join(module_dir, os.path.normpath('static/'+headerspath))
     img = headerspath + random.choice(os.listdir(headpath)) #change dir name to whatever
     return img
-
-#@login_required
-def perms_to_pex():
-    '''
-    Clear Tables
-    '''
-    Permission.objects.exclude(ptype__gte=2).exclude(ptype__exact=1,permission__regex=r'^((?!name).)*$').delete()
-    Entity.objects.all().delete()
-    Inheritance.objects.all().delete()
-
-    '''
-    Main Permissions
-    '''
-    perms = SitePerm.objects.all()# Site defined permissionsexcept invividual perms and system rows
-    for permi in perms:
-        if permi.perm is not None and len(permi.perm) > 0:
-            pex = Permission()# table ready to add new data
-            pex.name = str(permi.minrank)
-            pex.permission = ('-' if permi.bool == 'false' else '') + permi.perm
-            pex.ptype = 0
-            pex.world = permi.world if permi.world != 'All' and permi.world is not None else ''
-            pex.value = ''
-            pex.save()
-
-    '''
-    Users & Ranks
-    '''
-    users = SitePlayer.objects.all()# Site defined users
-    ranks = Rank.objects.all()# Site defined ranks
-
-    for user in users:
-        pex_entity = Entity()# table ready to add new data
-        pex_entity.name = str(user.uuid)
-        pex_entity.etype = 1
-        pex_entity.nick = user.player
-        pex_entity.save()
-
-        pex_inherit = Inheritance()# table ready to add new data
-        pex_inherit.child = str(user.uuid)
-        pex_inherit.parent = str(user.rank)
-        pex_inherit.itype = 1
-        pex_inherit.save()
-
-        pex = Permission()# table ready to add new data
-        pex.name = str(user.uuid)
-        pex.ptype = 1
-        pex.permission = 'name'
-        pex.value = user.player
-        pex.world = ''
-        pex.save()        
-    for rank in ranks:
-        pex_entity = Entity()# table ready to add new data
-        pex_entity.name = str(rank.rank)
-        pex_entity.etype = 0
-        pex_entity.save()
-
-        if rank.rank != 'default':
-            pex_inherit = Inheritance()# table ready to add new data
-            pex_inherit.child = str(rank.rank)
-            pex_inherit.parent = str(get_object_or_404(Rank,order__exact=(rank.order-1)))# Rank.objects.get(order__exact=(rank.order-1))
-            pex_inherit.itype = 0
-            pex_inherit.save()
-
-        if len(rank.prefix) > 0:
-            pex = Permission()# table ready to add new data
-            pex.name = str(rank.rank)
-            pex.ptype = 0
-            pex.permission = 'prefix'
-            pex.value = rank.prefix
-            pex.world = ''
-            pex.save()
-
-        if len(rank.suffix) > 0:
-            pex = Permission()# table ready to add new data
-            pex.name = str(rank.rank)
-            pex.ptype = 0
-            pex.permission = 'suffix'
-            pex.value = rank.suffix            
-            pex.world = ''
-            pex.save()
 
 def kits_to_ess():
     kitstring = ''
