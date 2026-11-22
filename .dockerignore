@@ -1,0 +1,13 @@
+.git
+.env
+.env.*
+!.env.production.example
+venv
+node_modules
+media
+db.sqlite3
+**/__pycache__
+*.pyc
+*.sock
+# An old copy of Django's admin assets; the image uses Django 5's own.
+static/admin
