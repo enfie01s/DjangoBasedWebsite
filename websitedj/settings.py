@@ -196,3 +196,18 @@ LOGGING = {
     },
 }
 '''
+
+# Errors (with tracebacks) go to the console, so `docker logs` shows them when DEBUG is off.
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'console': {'class': 'logging.StreamHandler'},
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['console'],
+            'level': os.getenv('DJANGO_LOGLEVEL', 'info').upper(),
+        },
+    },
+}
