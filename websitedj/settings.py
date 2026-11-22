@@ -16,8 +16,8 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 load_dotenv()
 ENVIRONMENT = os.getenv("ENVIRONMENT", "dev")
-DEBUG = os.getenv("DEBUG", "False")
-#{{ 'False' if ENVIRONMENT == 'prod' else 'True' }}
+# The env value is a string; "False" used to be truthy and showed Django's debug pages on the live site.
+DEBUG = os.getenv("DEBUG", "False").strip().lower() in ("1", "true", "yes", "on")
 DB_USER = os.getenv("DATABASE_USERNAME", "db_user")
 DB_PASS = os.getenv("DATABASE_PASSWORD", "db_pass")
 DB_NAME = os.getenv("DATABASE_NAME", "db_database_name")
@@ -39,6 +39,12 @@ def get_client_ip(request):
     return ip
 
 ALLOWED_HOSTS = os.getenv("DJANGO_ALLOWED_HOSTS","127.0.0.1").split(",")
+CSRF_TRUSTED_ORIGINS = [o for o in os.getenv("DJANGO_CSRF_TRUSTED_ORIGINS", "").split(",") if o]
+
+# Behind nginx and Traefik: TLS ends before the app, which is told the scheme in X-Forwarded-Proto.
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+SESSION_COOKIE_SECURE = not DEBUG
+CSRF_COOKIE_SECURE = not DEBUG
 
 
 # Application definition
@@ -61,6 +67,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -137,13 +144,18 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
 
-if DEBUG:
-    STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
-else:
-    STATIC_ROOT= os.path.join(BASE_DIR, 'static')
+STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
+# collectstatic gathers everything here; WhiteNoise serves it.
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATIC_URL = '/static/'
+STORAGES = {
+    'default': {'BACKEND': 'django.core.files.storage.FileSystemStorage'},
+    'staticfiles': {'BACKEND': 'whitenoise.storage.CompressedStaticFilesStorage'},
+}
+WHITENOISE_MAX_AGE = 365 * 24 * 60 * 60
+# Uploads (stored as e.g. "blog/2017/07/21/x.gif") live in media/, which is a volume in Docker.
 MEDIA_URL = '/media/'
-MEDIA_ROOT = BASE_DIR
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 DATE_FORMAT = 'Y-m-d'
 DATETIME_FORMAT = 'Y-m-d H:i'

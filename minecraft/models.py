@@ -126,8 +126,12 @@ class SitePlayer(models.Model):# specify db_column on a foreign key field or it 
         ordering = ['rank']
         #order_with_respect_to = 'rank' # needs _order column in this db
 
+def rank_choices():
+    # A function so the ranks are read when needed, not when the module is imported (no database at build time).
+    return list(Rank.objects.values_list('id', 'rank'))
+
 class SitePerm(models.Model):
-    RANKCHOICES = Rank.objects.values_list('id','rank').all()
+    RANKCHOICES = rank_choices
     PLUGINCHOICES = (
         ('GriefPrevention','Grief Prevention'),
         ('Essentials','Essentials'),

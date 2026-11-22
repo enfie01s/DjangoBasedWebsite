@@ -1,0 +1,32 @@
+# The current Django site on aristia.net, behind the shared Traefik proxy (ari-infrastructure).
+# Deploy: git pull && docker compose -f compose.production.yml --env-file .env.production up -d --build
+# Hand aristia.net to ari-site: docker compose -f compose.production.yml --env-file .env.production down
+name: websitedj
+
+services:
+  web:
+    image: aristia/websitedj:current
+    build: .
+    restart: unless-stopped
+    env_file: .env.production
+    # Runs as the aristia user so uploaded files stay owned by aristia.
+    user: '${APP_UID:?Set APP_UID}:${APP_GID:?Set APP_GID}'
+    extra_hosts:
+      # The database is the host's MariaDB.
+      - 'host.docker.internal:host-gateway'
+    volumes:
+      - ./media:/app/media
+    networks: [edge]
+    stop_grace_period: 20s
+    labels:
+      - 'traefik.enable=true'
+      - 'traefik.docker.network=${EDGE_NETWORK:-ari-edge}'
+      - 'traefik.http.routers.websitedj.rule=Host(`${SITE_DOMAIN:?Set SITE_DOMAIN}`) || Host(`www.${SITE_DOMAIN:?Set SITE_DOMAIN}`)'
+      - 'traefik.http.routers.websitedj.entrypoints=websecure'
+      - 'traefik.http.routers.websitedj.tls.certresolver=letsencrypt'
+      - 'traefik.http.services.websitedj.loadbalancer.server.port=8000'
+
+networks:
+  edge:
+    name: ${EDGE_NETWORK:-ari-edge}
+    external: true

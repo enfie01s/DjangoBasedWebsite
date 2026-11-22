@@ -22,3 +22,6 @@ static/sitepages/img/Stella-qr.jpg
 static/sitepages/img/mat-qr.svg
 static/sitepages/img/stella-qr.svg
 *.sublime*
+
+.env.production
+staticfiles/
