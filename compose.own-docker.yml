@@ -1,0 +1,17 @@
+# Runs the site in aristia's own (rootless) Docker instead of the server's, without Traefik: it is
+# published on 127.0.0.1:${SITE_PORT} and host nginx proxies aristia.net and www. to it.
+# Use with DOCKER_HOST set (see README, "Production (Docker)").
+services:
+  web:
+    # Root inside rootless Docker is aristia on the server, so uploads stay owned by aristia. (APP_UID would
+    # map to a different, unprivileged user here and couldn't write to media/.)
+    user: '0:0'
+    extra_hosts: !override
+      # The host's MariaDB at the server's own address: rootless Docker can't reach the host's loopback.
+      - 'host.docker.internal:${HOST_IP:?Set HOST_IP}'
+    ports: ['127.0.0.1:${SITE_PORT:?Set SITE_PORT}:8000']
+    networks: !override [default]
+    labels: !reset []
+
+networks:
+  edge: !reset {}
